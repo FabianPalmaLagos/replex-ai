@@ -1,8 +1,8 @@
 # 🎬 Replex AI
 
-**Plataforma SaaS de Auto-Generación y Publicación de Micro-Videos**
+## 📋 Descripción
 
-Replex AI es una plataforma que permite auto-generar y publicar micro-videos (TikTok, YouTube Shorts, Instagram Reels) desde prompts de lenguaje natural, combinando inteligencia artificial avanzada con herramientas de edición intuitivas.
+**Replex AI** es una plataforma SaaS que permite auto-generar y publicar micro-videos (TikTok, YouTube Shorts, Instagram Reels) desde prompts de lenguaje natural, combinando inteligencia artificial avanzada con herramientas de edición intuitivas.
 
 ## 🚀 Características Principales
 
@@ -11,83 +11,78 @@ Replex AI es una plataforma que permite auto-generar y publicar micro-videos (Ti
 - **📱 Publicación Seamless**: Integración directa con redes sociales
 - **📊 Insights Accionables**: Analytics y optimización continua
 
-## 🏗️ Arquitectura
+## 🏗️ Arquitectura Técnica
 
-### Tech Stack
-- **Frontend**: React 18 + TypeScript + WebGL/Canvas
-- **Backend**: Node.js 18.20.0 LTS + Express.js
-- **Base de Datos**: PostgreSQL 15+ + Redis
-- **Containerización**: Docker + Docker Compose
-- **Video Processing**: FFmpeg/WASM + WebCodecs API
+#### Tech Stack
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS 3.4
+- **Backend**: Node.js 18.20.0 LTS + Express.js *(por desarrollar)*
+- **Base de Datos**: PostgreSQL 15+ + Redis *(configurado)*
+- **Containerización**: Docker + Docker Compose *(configurado)*
+- **Video Processing**: FFmpeg/WASM + WebCodecs API *(por desarrollar)*
 
 ### Estructura del Monorepo
 ```
 replex-ai/
 ├── apps/
-│   ├── backend/          # API REST con Express.js
-│   └── frontend/         # Aplicación React
-├── packages/
-│   ├── types/           # Tipos TypeScript compartidos
-│   ├── shared/          # Utilidades compartidas
-│   └── config/          # Configuraciones compartidas
-├── scripts/             # Scripts de desarrollo y deployment
-└── docs/               # Documentación del proyecto
+│   ├── frontend/              # React + TypeScript + Tailwind
+│   │   ├── src/
+│   │   │   ├── components/    # Componentes React
+│   │   │   │   ├── App.tsx        # Aplicación principal
+│   │   │   │   └── main.tsx       # Punto de entrada
+│   │   │   └── package.json
+│   │   └── backend/               # Express.js (por implementar)
+│   └── packages/
+│       ├── config/                # Configuraciones compartidas
+│       ├── shared/                # Utilidades compartidas
+│       └── types/                 # Tipos TypeScript
+├── scripts/                   # Scripts de automatización
+├── docker-compose.yml         # Servicios de base de datos
+├── package.json               # Configuración monorepo
+└── README.md
 ```
 
-## 🛠️ Setup de Desarrollo
+## 🚀 Instalación y Ejecución
 
-### Prerrequisitos
-- Node.js 18.20.0 LTS o superior
-- npm 9.0.0 o superior
+#### Prerrequisitos
+- Node.js 18.20.0 LTS
 - Docker y Docker Compose
-- Git
+- npm 10.5.0+
 
-### Instalación Rápida
+#### Configuración Inicial
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/your-org/replex-ai.git
-   cd replex-ai
-   ```
+```bash
+# Clonar repositorio
+git clone <repository-url>
+cd replex-ai
 
-2. **Configurar variables de entorno**
-   ```bash
-   cp env.example .env
-   # Editar .env con tus configuraciones
-   ```
+# Instalar dependencias
+npm install
 
-3. **Instalar dependencias y levantar servicios**
-   ```bash
-   npm run setup
-   ```
+# Configurar variables de entorno
+cp env.example .env
 
-   Este comando ejecuta:
-   - `npm install` - Instala todas las dependencias
-   - `docker compose up -d` - Levanta PostgreSQL y Redis
+# Iniciar servicios de base de datos
+docker-compose up -d
 
-4. **Verificar instalación**
-   ```bash
-   npm run dev
-   ```
+# Ejecutar frontend
+npm run dev:frontend
+```
 
-### Comandos Disponibles
+#### Comandos Disponibles
 
 ```bash
 # Desarrollo
-npm run dev                 # Ejecutar frontend y backend en modo desarrollo
-npm run dev:backend        # Solo backend
-npm run dev:frontend       # Solo frontend
+npm run dev:frontend          # Inicia frontend en http://localhost:5173
+npm run dev:backend           # Backend (por implementar)
+npm run dev                   # Ambos servicios
+
+# Base de datos
+docker-compose up -d          # Inicia PostgreSQL + Redis
+docker-compose down           # Detiene servicios
 
 # Build
-npm run build              # Build de todos los workspaces
-npm run test               # Ejecutar tests
-npm run lint               # Linting de código
-npm run format             # Formatear código con Prettier
-
-# Docker
-npm run docker:up          # Levantar servicios (PostgreSQL, Redis)
-npm run docker:down        # Detener servicios
-npm run docker:logs        # Ver logs de servicios
+npm run build:frontend        # Build de producción frontend
+npm run build:backend         # Build backend (por implementar)
 ```
 
 ## 🐳 Servicios Docker
@@ -219,6 +214,84 @@ Ver [plan-proyecto-replex-ai.md](./plan-proyecto-replex-ai.md) para el plan comp
 - 📋 **Fase 2**: Gestión de series y prompts
 - 🤖 **Fase 3**: Motor de generación de contenido IA
 
+### ✅ Estado de Desarrollo
+
+#### Completado
+- **Infraestructura Base**: Monorepo configurado con workspaces
+- **Base de Datos**: PostgreSQL 15+ + Redis funcionando en Docker
+- **Frontend Core**: 
+  - Dashboard Analytics con gráficos interactivos (Recharts)
+  - Gestión de Series de videos (CRUD completo)
+  - Interface de Generación IA (simulación funcional)
+  - Navegación responsiva completa
+  - Componentes reutilizables con TypeScript
+
+#### Por Desarrollar
+- **Backend**: API REST con Express.js
+- **Autenticación**: Sistema de usuarios y sesiones
+- **Motor IA**: Integración con APIs de generación de contenido
+- **Procesamiento Audio**: Text-to-Speech y mixing automático
+- **Editor Timeline**: Editor de video en navegador
+- **Integración Social**: APIs de TikTok, Instagram, YouTube
+- **Analytics Avanzado**: Métricas reales de plataformas
+- **Moderación**: Sistema de filtrado de contenido
+
+### 📊 Componentes Frontend
+
+#### Dashboard Analytics
+- Métricas principales (visualizaciones, videos, engagement, seguidores)
+- Gráficos de barras, líneas y circulares
+- Lista de videos recientes con performance
+- Distribución por plataforma
+
+#### Gestión de Series
+- CRUD completo de series de videos
+- Filtros por estado y búsqueda
+- Estados: activa, pausada, borrador
+- Métricas de performance por serie
+
+#### Generación IA
+- Interface para tipos de contenido (guión, imagen, audio, video)
+- Sistema de prompts con textarea
+- Cola de trabajos con estados y progreso
+- Simulación de generación con barras de progreso
+
+#### Navegación
+- Sidebar responsivo con estados activos
+- Header con búsqueda global
+- Navegación móvil colapsable
+- Routing entre secciones
+
+### 🔧 Configuración de Desarrollo
+
+#### Variables de Entorno
+```bash
+# Base de datos
+DATABASE_URL=postgresql://replex:password@localhost:5432/replex_db
+REDIS_URL=redis://localhost:6379
+
+# Puertos
+FRONTEND_PORT=5173
+BACKEND_PORT=3000
+```
+
+#### Puertos Utilizados
+- **Frontend**: http://localhost:5173
+- **PostgreSQL**: localhost:5432
+- **Redis**: localhost:6379
+- **Adminer**: http://localhost:8080
+- **Redis Commander**: http://localhost:8081
+
+### 📝 Notas de Desarrollo
+
+- El frontend utiliza datos mock para demostración
+- La navegación entre secciones está completamente funcional
+- Los componentes están tipados con TypeScript
+- El diseño es completamente responsivo
+- Todos los componentes siguen principios de accesibilidad
+
 ---
+
+*Última actualización: Enero 2025*
 
 **Desarrollado con ❤️ por el equipo de Replex AI** 

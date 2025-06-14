@@ -2,145 +2,139 @@
 
 ## Descripción
 
-Frontend de la plataforma Replex AI implementado con React 18, TypeScript, Vite, Tailwind CSS y Recharts. Incluye los componentes principales del dashboard analytics y gestión de series según el plan del proyecto.
+Frontend de la plataforma Replex AI implementado con React 18, TypeScript, Vite y Tailwind CSS 3.4. Incluye dashboard analytics, gestión de series y generación IA con datos simulados.
 
-## Tecnologías Utilizadas
+## Tecnologías
 
 - **React 18** - Framework principal
 - **TypeScript** - Tipado estático
-- **Vite** - Build tool y dev server
-- **Tailwind CSS** - Framework de CSS utility-first
-- **Recharts** - Librería de gráficos para React
-- **Headless UI** - Componentes accesibles sin estilos
-- **Heroicons** - Iconos SVG
-- **Lucide React** - Iconos adicionales
+- **Vite 6.3.5** - Build tool y servidor de desarrollo
+- **Tailwind CSS 3.4** - Framework de estilos
+- **Recharts 2.15.3** - Gráficos interactivos
+- **Headless UI 2.2.4** - Componentes accesibles
+- **Heroicons 2.2.0** - Iconos SVG
+- **Lucide React 0.507.0** - Iconos adicionales
+
+## Instalación y Ejecución
+
+```bash
+# Desde la raíz del proyecto
+npm run dev:frontend
+
+# O desde apps/frontend
+cd apps/frontend
+npm install
+npm run dev
+```
+
+**URL de desarrollo**: http://localhost:5173
+
+## Comandos Disponibles
+
+```bash
+npm run dev        # Servidor de desarrollo
+npm run build      # Build de producción
+npm run preview    # Preview del build
+npm run lint       # Linting con ESLint
+```
 
 ## Componentes Implementados
 
-### 1. Dashboard Analytics (`DashboardAnalytics.tsx`)
-- **Métricas principales**: Visualizaciones, videos generados, engagement rate, nuevos seguidores
-- **Gráficos interactivos**: 
-  - Gráfico de barras para rendimiento de videos
-  - Gráfico circular para distribución por plataforma
-  - Gráfico de líneas para tendencias de engagement
-- **Lista de videos recientes** con métricas de performance
-- **Datos mock** para demostración
+### Dashboard Analytics
+- Métricas principales con iconos y tendencias
+- Gráfico de barras para rendimiento de videos
+- Gráfico circular para distribución por plataforma
+- Gráfico de líneas para tendencias de engagement
+- Lista de videos recientes con métricas
 
-### 2. Gestión de Series (`SeriesManager.tsx`)
-- **CRUD de series**: Crear, editar, pausar/activar, eliminar series
-- **Filtros y búsqueda**: Por estado (activa, pausada, borrador) y texto
-- **Información detallada**: Videos generados, frecuencia, plataformas, performance
-- **Estados visuales**: Indicadores de color para diferentes estados
-- **Menús contextuales** para acciones rápidas
+### Gestión de Series
+- Lista de series con filtros y búsqueda
+- Estados: activa, pausada, borrador
+- Menús contextuales para acciones (editar, pausar/activar, eliminar)
+- Información detallada: videos generados, frecuencia, plataformas
+- Métricas de performance por serie
 
-### 3. Generación IA (`AIGeneration.tsx`)
-- **Tipos de generación**: Guión, imágenes, audio, video
-- **Interface de prompts**: Textarea para describir contenido a generar
-- **Cola de trabajos**: Lista de trabajos con estados y progreso
-- **Simulación de progreso**: Barras de progreso animadas
-- **Estados de trabajo**: Pendiente, procesando, completado, error
+### Generación IA
+- Selección de tipos de contenido (guión, imagen, audio, video)
+- Interface de prompts con textarea
+- Cola de trabajos con estados y progreso
+- Simulación de generación con barras de progreso animadas
+- Estados: pendiente, procesando, completado, error
 
-### 4. Navegación (`Sidebar.tsx`, `Header.tsx`)
-- **Sidebar responsivo**: Navegación principal con estados activos
-- **Header con búsqueda**: Barra de búsqueda global y perfil de usuario
-- **Navegación móvil**: Sidebar colapsable para dispositivos móviles
-- **Branding**: Logo y nombre de la aplicación
+### Navegación
+- Sidebar responsivo con navegación entre secciones
+- Header con búsqueda global y perfil de usuario
+- Navegación móvil colapsable
+- Estados activos en navegación
 
 ## Estructura de Archivos
 
 ```
 src/
 ├── components/
-│   ├── DashboardAnalytics.tsx    # Dashboard principal con gráficos
-│   ├── SeriesManager.tsx         # Gestión de series de videos
+│   ├── DashboardAnalytics.tsx    # Dashboard principal
+│   ├── SeriesManager.tsx         # Gestión de series
 │   ├── AIGeneration.tsx          # Interface de generación IA
 │   ├── Sidebar.tsx               # Navegación lateral
-│   └── Header.tsx                # Cabecera con búsqueda
-├── App.tsx                       # Componente principal con routing
+│   └── Header.tsx                # Cabecera
+├── App.tsx                       # Componente principal
 ├── main.tsx                      # Punto de entrada
-└── index.css                     # Estilos globales con Tailwind
+└── index.css                     # Estilos globales
 ```
 
-## Características Implementadas
+## Configuración
+
+### Tailwind CSS
+- Configurado con colores personalizados (primary)
+- Responsive design con breakpoints estándar
+- Componentes y utilidades personalizadas
+
+### Vite
+- Plugin de React con Fast Refresh
+- TypeScript support
+- Hot Module Replacement (HMR)
+
+## Datos Mock
+
+Los componentes utilizan datos simulados:
+- Series de ejemplo con diferentes estados
+- Métricas de analytics ficticias
+- Trabajos de generación IA simulados
+- Progreso animado para demostración
+
+## Responsive Design
+
+- Mobile-first approach
+- Breakpoints: sm (640px), md (768px), lg (1024px), xl (1280px)
+- Sidebar colapsable en móvil
+- Grids adaptivos según tamaño de pantalla
+
+## Accesibilidad
+
+- Headless UI para componentes accesibles
+- ARIA labels para lectores de pantalla
+- Navegación por teclado
+- Contraste de colores según estándares WCAG
+
+## Estado de Desarrollo
 
 ### ✅ Completado
 - Dashboard analytics con gráficos interactivos
 - Gestión completa de series de videos
 - Interface de generación IA con simulación
 - Navegación responsiva entre secciones
-- Diseño moderno con Tailwind CSS
 - Componentes reutilizables y tipados
 - Estados de carga y feedback visual
 
-### 🔄 Próximas Implementaciones
+### Por Desarrollar
+- Integración con APIs reales del backend
+- Sistema de autenticación
+- Editor de timeline para videos
 - Gestión de videos individuales
 - Programación de publicaciones
-- Analytics de audiencia
+- Analytics de audiencia real
 - Configuración de usuario
-- Integración con APIs reales
-
-## Instalación y Desarrollo
-
-```bash
-# Instalar dependencias
-npm install
-
-# Ejecutar en desarrollo
-npm run dev
-
-# Build para producción
-npm run build
-
-# Preview del build
-npm run preview
-```
-
-## Configuración
-
-### Tailwind CSS
-Configurado con:
-- Colores personalizados (primary, secondary)
-- Fuentes (Inter como principal)
-- Espaciado y breakpoints responsivos
-- Componentes y utilidades personalizadas
-
-### Vite
-Configurado con:
-- Plugin de React con Fast Refresh
-- TypeScript support
-- Hot Module Replacement (HMR)
-- Optimización de build
-
-## Datos Mock
-
-Los componentes utilizan datos simulados para demostración:
-- Series de ejemplo con diferentes estados
-- Métricas de analytics ficticias
-- Trabajos de generación IA simulados
-- Progreso animado para mejor UX
-
-## Responsive Design
-
-- **Mobile First**: Diseño optimizado para móviles
-- **Breakpoints**: sm, md, lg, xl para diferentes tamaños
-- **Sidebar colapsable**: En móvil se convierte en overlay
-- **Grids adaptivos**: Columnas que se ajustan al tamaño de pantalla
-
-## Accesibilidad
-
-- **Headless UI**: Componentes con soporte completo de accesibilidad
-- **ARIA labels**: Etiquetas descriptivas para lectores de pantalla
-- **Navegación por teclado**: Soporte completo de navegación
-- **Contraste de colores**: Cumple estándares WCAG
-
-## Próximos Pasos
-
-1. **Integración con Backend**: Conectar con APIs reales
-2. **Autenticación**: Sistema de login y gestión de usuarios
-3. **Editor de Timeline**: Implementar editor de video en navegador
-4. **Publicación Social**: Integración con APIs de redes sociales
-5. **Optimización**: Performance y caching avanzado
 
 ---
 
-*Implementación basada en el plan del proyecto Replex AI - Enero 2025*
+*Versión actual: Frontend funcional con datos mock*
