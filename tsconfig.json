@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@replex/shared/*": ["packages/shared/src/*"],
+      "@replex/types/*": ["packages/types/src/*"],
+      "@replex/config/*": ["packages/config/src/*"]
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "include": [
+    "apps/**/*",
+    "packages/**/*",
+    "scripts/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "references": [
+    { "path": "./apps/backend" },
+    { "path": "./apps/frontend" },
+    { "path": "./packages/shared" },
+    { "path": "./packages/types" },
+    { "path": "./packages/config" }
+  ]
+} 

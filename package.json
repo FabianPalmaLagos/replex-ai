@@ -1,0 +1,49 @@
+{
+  "name": "replex-ai",
+  "version": "1.0.0",
+  "description": "Plataforma SaaS de Auto-Generación y Publicación de Micro-Videos",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "setup": "npm install && npm run docker:up",
+    "verify": "node scripts/verify-setup.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.1.1",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.20.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/replex-ai.git"
+  },
+  "keywords": [
+    "ai",
+    "video-generation",
+    "social-media",
+    "automation",
+    "saas"
+  ],
+  "author": "Replex AI Team",
+  "license": "MIT"
+} 

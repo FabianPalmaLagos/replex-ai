@@ -1,0 +1,170 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Archivos de runtime
+*.pid
+*.seed
+*.pid.lock
+
+# Directorios de coverage
+lib-cov
+coverage/
+*.lcov
+.nyc_output
+
+# Instrumentación de coverage
+.grunt
+
+# Directorio de dependencias de Bower
+bower_components
+
+# Configuración de node-waf
+.lock-wscript
+
+# Addons binarios compilados
+build/Release
+
+# Directorios de dependencias
+node_modules/
+jspm_packages/
+
+# Archivos de TypeScript
+*.tsbuildinfo
+
+# Archivos de cache de npm
+.npm
+
+# Archivos de cache de ESLint
+.eslintcache
+
+# Archivos de cache de Stylelint
+.stylelintcache
+
+# Archivos de cache de Microbundle
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Historial de REPL
+.node_repl_history
+
+# Salida de 'npm pack'
+*.tgz
+
+# Archivo de integridad de Yarn
+.yarn-integrity
+
+# Archivos de variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+
+# Cache de parcel-bundler
+.cache
+.parcel-cache
+
+# Salida de Next.js
+.next
+out
+
+# Salida de Nuxt.js
+.nuxt
+dist
+
+# Archivos de Gatsby
+.cache/
+public
+
+# Archivos de Vuepress
+.vuepress/dist
+
+# Archivos de Serverless
+.serverless/
+
+# Archivos de FuseBox
+.fusebox/
+
+# Archivos locales de DynamoDB
+.dynamodb/
+
+# Archivo de puerto de TernJS
+.tern-port
+
+# Archivos de Stores de VSCode
+.vscode-test
+
+# Archivos de Yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Archivos específicos del sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archivos de IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Archivos de build
+dist/
+build/
+out/
+
+# Archivos de Docker
+.docker/
+
+# Archivos de base de datos locales
+*.sqlite
+*.sqlite3
+*.db
+
+# Archivos de backup
+*.backup
+*.bak
+
+# Archivos temporales
+tmp/
+temp/
+.tmp/
+
+# Archivos de certificados SSL
+*.pem
+*.key
+*.crt
+
+# Archivos de configuración local
+config/local.json
+config/local.js
+
+# Archivos de pruebas
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# Archivos de monitoreo
+.pm2/ 
