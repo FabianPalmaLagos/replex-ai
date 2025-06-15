@@ -6,20 +6,31 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
-import { Bell, Search, Menu as MenuIcon, User } from 'lucide-react'
+import { Bell, Search, Menu as MenuIcon, User, LogOut } from 'lucide-react'
 import clsx from 'clsx'
-
-const userNavigation = [
-  { name: 'Tu perfil', href: '#' },
-  { name: 'Configuración', href: '#' },
-  { name: 'Cerrar sesión', href: '#' },
-]
+import { useAuth } from '../contexts/AuthContext'
 
 interface HeaderProps {
   setSidebarOpen: (open: boolean) => void
 }
 
 export function Header({ setSidebarOpen }: HeaderProps) {
+  const { user, logout, isLoading } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error en logout:', error);
+    }
+  };
+
+  const userNavigation = [
+    { name: 'Tu perfil', href: '#', action: () => console.log('Ir a perfil') },
+    { name: 'Configuración', href: '#', action: () => console.log('Ir a configuración') },
+    { name: 'Cerrar sesión', href: '#', action: handleLogout, icon: LogOut },
+  ];
+
   return (
     <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
       <button
@@ -69,7 +80,7 @@ export function Header({ setSidebarOpen }: HeaderProps) {
               </div>
               <span className="hidden lg:flex lg:items-center">
                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                  Usuario Demo
+                  {user?.name || 'Usuario'}
                 </span>
                 <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
@@ -83,19 +94,30 @@ export function Header({ setSidebarOpen }: HeaderProps) {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-48 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                 {userNavigation.map((item) => (
                   <Menu.Item key={item.name}>
                     {({ active }) => (
-                      <a
-                        href={item.href}
+                      <button
+                        onClick={item.action}
+                        disabled={isLoading && item.name === 'Cerrar sesión'}
                         className={clsx(
                           active ? 'bg-gray-50' : '',
-                          'block px-3 py-1 text-sm leading-6 text-gray-900'
+                          'w-full text-left flex items-center px-3 py-2 text-sm leading-6 text-gray-900 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed'
                         )}
                       >
-                        {item.name}
-                      </a>
+                        {item.icon && (
+                          <item.icon className="mr-2 h-4 w-4" />
+                        )}
+                        {isLoading && item.name === 'Cerrar sesión' ? (
+                          <div className="flex items-center">
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-900 mr-2"></div>
+                            Cerrando sesión...
+                          </div>
+                        ) : (
+                          item.name
+                        )}
+                      </button>
                     )}
                   </Menu.Item>
                 ))}

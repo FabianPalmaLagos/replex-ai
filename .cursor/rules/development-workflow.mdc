@@ -244,9 +244,9 @@ Referencia: [package.json](mdc:package.json)
 
 ```bash
 # Desarrollo
-npm run dev              # Frontend + Backend en paralelo
-npm run dev:frontend     # Solo frontend (puerto 5173)
-npm run dev:backend      # Solo backend (cuando esté listo)
+npm run dev              # Frontend + Backend en paralelo ✅
+npm run dev:frontend     # Solo frontend (puerto 5173) ✅
+npm run dev:backend      # Solo backend (puerto 3000) ✅
 
 # Build y Deploy
 npm run build            # Build de todos los workspaces
@@ -310,33 +310,34 @@ docker exec -it replex-redis redis-cli
 
 ## 📊 Monitoring y Logging
 
-### Development Monitoring
+### Development Monitoring ✅ **IMPLEMENTADO**
 ```bash
-# Logs de aplicación
-tail -f logs/combined.log
+# Logs de aplicación backend ✅
+tail -f apps/backend/logs/combined.log
+tail -f apps/backend/logs/error.log
 
-# Logs de Docker
+# Logs de Docker ✅
 docker compose logs -f
 
 # Monitoring de performance
 npm run dev -- --profile
 ```
 
-### Error Tracking (Futuro)
-- **Sentry** para error tracking
-- **Winston** para logging estructurado
-- **Prometheus** para métricas
-- **Grafana** para visualización
+### Error Tracking
+- **Winston** para logging estructurado ✅ **IMPLEMENTADO**
+- **Sentry** para error tracking (futuro)
+- **Prometheus** para métricas (futuro)
+- **Grafana** para visualización (futuro)
 
 ## 🔒 Security Workflow
 
 ### Security Checklist
-- [ ] Variables de entorno no committeadas
-- [ ] Dependencias actualizadas y sin vulnerabilidades
+- [x] Variables de entorno no committeadas ✅
+- [x] Dependencias actualizadas y sin vulnerabilidades ✅
 - [ ] Secrets rotados regularmente
 - [ ] HTTPS en producción
-- [ ] Rate limiting implementado
-- [ ] Input validation en todas las rutas
+- [x] Rate limiting implementado ✅
+- [x] Input validation en todas las rutas ✅
 
 ### Security Commands
 ```bash

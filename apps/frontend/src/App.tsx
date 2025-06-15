@@ -4,10 +4,14 @@ import { SeriesManager } from './components/SeriesManager'
 import { AIGeneration } from './components/AIGeneration'
 import { Sidebar } from './components/Sidebar'
 import { Header } from './components/Header'
+import { LoginPage } from './components/LoginPage'
+import { RegisterPage } from './components/RegisterPage'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 
 type CurrentView = 'dashboard' | 'analytics' | 'series' | 'ai-generation' | 'videos' | 'scheduling' | 'audience' | 'trends' | 'settings'
 
-function App() {
+// Componente principal de la aplicación autenticada
+function AuthenticatedApp() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [currentView, setCurrentView] = useState<CurrentView>('analytics')
 
@@ -80,6 +84,41 @@ function App() {
       </div>
     </div>
   )
+}
+
+// Componente de autenticación
+function AuthComponent() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const [showRegister, setShowRegister] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    if (showRegister) {
+      return <RegisterPage onSwitchToLogin={() => setShowRegister(false)} />;
+    }
+    return <LoginPage onSwitchToRegister={() => setShowRegister(true)} />;
+  }
+
+  return <AuthenticatedApp />;
+}
+
+// Componente principal con provider de autenticación
+function App() {
+  return (
+    <AuthProvider>
+      <AuthComponent />
+    </AuthProvider>
+  );
 }
 
 export default App

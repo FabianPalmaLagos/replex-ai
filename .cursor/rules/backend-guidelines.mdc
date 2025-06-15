@@ -15,15 +15,21 @@ alwaysApply: false
 - **TypeScript** para tipado estricto
 - **Docker** para containerización
 
-### Dependencias Clave (Planificadas)
-- **Prisma** o **TypeORM** para ORM
-- **JWT** para autenticación
-- **bcrypt** para hashing de contraseñas
-- **Joi** o **Zod** para validación de schemas
-- **Winston** para logging
+### Dependencias Clave ✅ **IMPLEMENTADAS**
+- **JWT** para autenticación ✅
+- **bcrypt** para hashing de contraseñas ✅
+- **Joi** para validación de schemas ✅
+- **Winston** para logging ✅
+- **Express Rate Limit** para protección ✅
+- **Helmet** para seguridad HTTP ✅
+- **CORS** para cross-origin requests ✅
+- **Nodemailer** para emails transaccionales ✅
+
+### Dependencias Futuras
+- **Prisma** o **TypeORM** para ORM (actualmente usando pg directo)
 - **Bull** o **Agenda** para queue jobs
 
-## 📁 Estructura Backend (Planificada)
+## 📁 Estructura Backend ✅ **IMPLEMENTADA**
 
 ```
 apps/backend/
@@ -41,14 +47,37 @@ apps/backend/
 └── seeds/             # Datos de prueba
 ```
 
+## ✅ Estado Actual del Backend
+
+### Funcionalidades Implementadas
+- **API REST completa** con Express.js y TypeScript
+- **Sistema de autenticación JWT** con access/refresh tokens
+- **Base de datos PostgreSQL** con tablas users y refresh_tokens
+- **Middleware de seguridad** (CORS, Helmet, Rate Limiting)
+- **Sistema de logging** estructurado con Winston
+- **Validación de datos** con schemas Joi
+- **Emails transaccionales** para verificación y reset de contraseña
+- **Health checks** y métricas del sistema
+
+### Endpoints Disponibles
+- **Autenticación**: `/api/v1/auth/*` (register, login, refresh, logout, verify-email, forgot-password, reset-password, me, status)
+- **Health Check**: `/api/v1/health` (métricas del sistema)
+- **Info API**: `/api/v1` (información general del API)
+
+### URLs de Desarrollo
+- **Backend API**: http://localhost:3000/api/v1
+- **Health Check**: http://localhost:3000/api/v1/health
+- **PostgreSQL**: localhost:5432 (replex_user/replex_password)
+- **Redis**: localhost:6379
+
 ## 🎯 Principios de Desarrollo Backend
 
-### Arquitectura
-1. **Separación de responsabilidades** - Controllers, Services, Models
-2. **Dependency Injection** donde sea apropiado
-3. **Error handling centralizado** con middleware
-4. **Validación de entrada** en todas las rutas
-5. **Logging estructurado** para debugging y monitoreo
+### Arquitectura ✅ **IMPLEMENTADA**
+1. **Separación de responsabilidades** - Controllers, Services, Models ✅
+2. **Error handling centralizado** con middleware ✅
+3. **Validación de entrada** en todas las rutas ✅
+4. **Logging estructurado** para debugging y monitoreo ✅
+5. **Dependency Injection** donde sea apropiado (futuro)
 
 ### Ejemplo de Estructura de Controlador
 ```typescript
@@ -140,17 +169,31 @@ export const authenticateToken = (
 ### Configuración Docker
 Referencia: [docker-compose.yml](mdc:docker-compose.yml)
 
-### Modelos de Datos (Planificados)
+### Modelos de Datos ✅ **IMPLEMENTADOS**
 ```typescript
-// models/User.ts
+// models/User.ts - ✅ IMPLEMENTADO
 export interface User {
   id: string;
   email: string;
   password: string;
   name: string;
   role: 'admin' | 'user';
-  createdAt: Date;
-  updatedAt: Date;
+  email_verified: boolean;
+  email_verification_token?: string;
+  email_verification_expires?: Date;
+  password_reset_token?: string;
+  password_reset_expires?: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// models/RefreshToken.ts - ✅ IMPLEMENTADO
+export interface RefreshToken {
+  id: string;
+  user_id: string;
+  token: string;
+  expires_at: Date;
+  created_at: Date;
 }
 
 // models/Series.ts

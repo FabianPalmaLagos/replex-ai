@@ -1,8 +1,3 @@
----
-description:
-globs:
-alwaysApply: false
----
 # Proyecto Replex AI - Reglas de Desarrollo
 
 ## 📋 Descripción del Proyecto
@@ -15,21 +10,21 @@ alwaysApply: false
 ```
 replex-ai/
 ├── apps/
-│   ├── frontend/     # React 18 + TypeScript + Vite + Tailwind CSS
-│   └── backend/      # Node.js 18.20.0 + Express.js (en desarrollo)
+│   ├── frontend/     # React 18 + TypeScript + Vite + Tailwind CSS ✅
+│   └── backend/      # Node.js 18.20.0 + Express.js + JWT Auth ✅
 ├── packages/
 │   ├── config/       # Configuraciones compartidas
 │   ├── shared/       # Utilidades compartidas
-│   └── types/        # Tipos TypeScript compartidos
-├── scripts/          # Scripts de automatización
+│   └── types/        # Tipos TypeScript compartidos ✅
+├── scripts/          # Scripts de automatización ✅
 └── docs/            # Documentación del proyecto
 ```
 
 ### Tech Stack Principal
-- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS 3.4
-- **Backend**: Node.js 18.20.0 LTS + Express.js
-- **Base de Datos**: PostgreSQL 15+ + Redis
-- **Containerización**: Docker + Docker Compose
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS 3.4 ✅
+- **Backend**: Node.js 18.20.0 LTS + Express.js + JWT ✅
+- **Base de Datos**: PostgreSQL 15+ + Redis ✅
+- **Containerización**: Docker + Docker Compose ✅
 - **Video Processing**: FFmpeg/WASM + WebCodecs API (futuro)
 
 ## 🎯 Principios de Desarrollo
@@ -62,24 +57,38 @@ replex-ai/
 - [apps/frontend/vite.config.ts](mdc:apps/frontend/vite.config.ts) - Configuración de Vite
 - [apps/frontend/tailwind.config.js](mdc:apps/frontend/tailwind.config.js) - Configuración de Tailwind CSS
 
+### Backend
+- [apps/backend/package.json](mdc:apps/backend/package.json) - Dependencias del backend
+- [apps/backend/src/app.ts](mdc:apps/backend/src/app.ts) - Aplicación principal Express.js
+
 ### Planificación
 - [plan-proyecto-replex-ai.md](mdc:plan-proyecto-replex-ai.md) - Plan detallado del proyecto por fases
 
 ## 🚀 Estado Actual del Proyecto
 
-### ✅ Completado (Fase 0 y 0.5)
-- Monorepo configurado con workspaces
-- Docker Compose con PostgreSQL + Redis
-- Frontend funcional con React 18 + TypeScript + Tailwind CSS
-- Componentes principales: Dashboard, Gestión de Series, Generación IA
-- Herramientas de desarrollo: ESLint, Prettier, TypeScript
+### ✅ Completado (Fases 0, 0.5, 1 y 1.5) - 50% del Proyecto
+- **Monorepo configurado** con workspaces
+- **Docker Compose** con PostgreSQL + Redis + Adminer + Redis Commander
+- **Frontend funcional** con React 18 + TypeScript + Tailwind CSS
+- **Componentes principales**: Dashboard, Gestión de Series, Generación IA
+- **Backend API REST** completo con Express.js
+- **Sistema de autenticación JWT** completo con access/refresh tokens
+- **Base de datos operativa** con tablas users y refresh_tokens
+- **Herramientas de desarrollo**: ESLint, Prettier, TypeScript
+- **Sistema de logging** con Winston
+- **Middleware de seguridad**: CORS, helmet, rate limiting
+- **Emails transaccionales** para verificación y reset de contraseña
 
-### ❌ Pendiente (Fases 1-8)
-- Sistema de autenticación y backend API
-- Motor de generación de contenido IA
-- Editor timeline en navegador
-- Integración con redes sociales
-- Analytics y moderación
+### 🔄 En Progreso
+- Ninguna tarea actualmente en progreso
+
+### ❌ Pendiente (Fases 2-8)
+- **Integración Frontend-Backend**: Conectar React con API de autenticación
+- **Gestión de Series**: Backend API para CRUD de series
+- **Motor de generación de contenido IA**
+- **Editor timeline en navegador**
+- **Integración con redes sociales**
+- **Analytics y moderación**
 
 ## 🎨 Convenciones de Código
 
@@ -94,6 +103,12 @@ replex-ai/
 - Usar Tailwind CSS para estilos
 - Componentes reutilizables en `src/components/`
 
+### Backend
+- Usar Express.js con TypeScript
+- Middleware para autenticación y validación
+- Servicios separados para lógica de negocio
+- Schemas de validación con Joi
+
 ### Naming Conventions
 - Archivos: kebab-case (`user-profile.tsx`)
 - Componentes: PascalCase (`UserProfile`)
@@ -105,7 +120,7 @@ replex-ai/
 ### Desarrollo
 - `npm run dev` - Ejecuta frontend y backend en paralelo
 - `npm run dev:frontend` - Solo frontend (puerto 5173)
-- `npm run dev:backend` - Solo backend (cuando esté implementado)
+- `npm run dev:backend` - Solo backend (puerto 3000)
 
 ### Docker
 - `npm run docker:up` - Levanta servicios de base de datos
@@ -117,19 +132,56 @@ replex-ai/
 - `npm run format` - Formatea código con Prettier
 - `npm test` - Ejecuta tests (cuando estén implementados)
 
+## 🌐 URLs de Desarrollo
+
+### Aplicaciones
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3000/api/v1
+- **Health Check**: http://localhost:3000/api/v1/health
+
+### Base de Datos
+- **PostgreSQL**: localhost:5432 (replex_user/replex_password)
+- **Redis**: localhost:6379
+- **Adminer**: http://localhost:8080
+- **Redis Commander**: http://localhost:8081
+
+### Credenciales de Prueba
+- **Admin**: admin@replex-ai.com / admin123
+- **Base de datos**: replex_user / replex_password
+
 ## 🎯 Objetivos de Desarrollo
 
-### Inmediatos (Fase 1)
-- Implementar sistema de autenticación completo
-- Crear API base con Express.js
-- Conectar frontend con backend
+### Inmediatos (Fase 2)
+- Conectar frontend con backend API de autenticación
+- Implementar gestión de series en backend
+- Integrar sistema de prompts con plantillas
 
-### Mediano Plazo (Fases 2-4)
+### Mediano Plazo (Fases 3-4)
 - Integrar APIs de IA para generación de contenido
 - Implementar procesamiento de audio y voz
-- Desarrollar sistema de gestión de series
+- Desarrollar queue system para procesamiento asíncrono
 
 ### Largo Plazo (Fases 5-8)
 - Editor timeline avanzado en navegador
 - Integración con redes sociales
 - Sistema de analytics y optimización
+
+## 🔐 Sistema de Autenticación Implementado
+
+### Endpoints Disponibles
+- `POST /api/v1/auth/register` - Registro de usuarios
+- `POST /api/v1/auth/login` - Inicio de sesión
+- `POST /api/v1/auth/refresh` - Renovar tokens
+- `POST /api/v1/auth/logout` - Cerrar sesión
+- `POST /api/v1/auth/verify-email/:token` - Verificar email
+- `POST /api/v1/auth/forgot-password` - Solicitar reset de contraseña
+- `POST /api/v1/auth/reset-password` - Restablecer contraseña
+- `GET /api/v1/auth/me` - Información del usuario autenticado
+- `GET /api/v1/auth/status` - Estado de autenticación
+
+### Características
+- **JWT Tokens**: Access tokens (15min) + Refresh tokens (7 días)
+- **Seguridad**: bcrypt hash (12 rounds), rate limiting por endpoint
+- **Emails**: Verificación de cuenta y reset de contraseña
+- **Validación**: Schemas Joi para todos los endpoints
+- **Base de datos**: Tablas users y refresh_tokens con triggers automáticos
