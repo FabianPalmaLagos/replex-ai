@@ -1,0 +1,201 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Frontend Guidelines - Replex AI
+
+## 🎨 Tecnologías Frontend
+
+### Stack Principal
+- **React 18** con TypeScript estricto
+- **Vite 6.3.5** para desarrollo y build optimizado
+- **Tailwind CSS 3.4** para estilos utility-first
+- **Recharts 2.15.3** para visualización de datos
+- **Headless UI 2.2.4** para componentes accesibles
+- **Lucide React + Heroicons** para iconografía consistente
+
+## 📁 Estructura de Archivos Frontend
+
+### Organización de Componentes
+```
+apps/frontend/src/
+├── components/
+│   ├── ui/           # Componentes base reutilizables
+│   ├── dashboard/    # Componentes específicos del dashboard
+│   ├── series/       # Componentes de gestión de series
+│   └── generation/   # Componentes de generación IA
+├── pages/           # Páginas principales de la aplicación
+├── hooks/           # Custom hooks reutilizables
+├── utils/           # Utilidades y helpers
+├── types/           # Tipos TypeScript específicos del frontend
+└── assets/          # Recursos estáticos
+```
+
+## 🎯 Principios de Desarrollo Frontend
+
+### Componentes React
+1. **Componentes funcionales únicamente** - No usar class components
+2. **Props tipadas con interfaces** - Definir interfaces claras para todas las props
+3. **Hooks personalizados** para lógica reutilizable
+4. **Composición sobre herencia** - Usar composition patterns
+5. **Componentes pequeños y enfocados** - Single Responsibility Principle
+
+### Ejemplo de Componente Tipado
+```typescript
+interface UserCardProps {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  onEdit?: (userId: string) => void;
+  className?: string;
+}
+
+export const UserCard: React.FC<UserCardProps> = ({ 
+  user, 
+  onEdit, 
+  className = '' 
+}) => {
+  return (
+    <div className={`bg-white rounded-lg shadow-md p-4 ${className}`}>
+      <h3 className="text-lg font-semibold">{user.name}</h3>
+      <p className="text-gray-600">{user.email}</p>
+      {onEdit && (
+        <button 
+          onClick={() => onEdit(user.id)}
+          className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Editar
+        </button>
+      )}
+    </div>
+  );
+};
+```
+
+## 🎨 Guías de Estilo con Tailwind CSS
+
+### Convenciones de Clases
+1. **Mobile-first approach** - Usar breakpoints responsivos (`sm:`, `md:`, `lg:`, `xl:`)
+2. **Clases utilitarias** sobre CSS personalizado
+3. **Consistencia en spacing** - Usar escala de Tailwind (4, 8, 12, 16, etc.)
+4. **Colores del sistema** - Usar palette definida en `tailwind.config.js`
+
+### Configuración de Tailwind
+Referencia: [apps/frontend/tailwind.config.js](mdc:apps/frontend/tailwind.config.js)
+
+### Patrones de Diseño Comunes
+```typescript
+// Layout containers
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+// Cards
+<div className="bg-white rounded-lg shadow-md p-6">
+
+// Buttons
+<button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+
+// Form inputs
+<input className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+```
+
+## 🔧 Configuración de Desarrollo
+
+### Vite Configuration
+Referencia: [apps/frontend/vite.config.ts](mdc:apps/frontend/vite.config.ts)
+
+### TypeScript Configuration
+- [apps/frontend/tsconfig.json](mdc:apps/frontend/tsconfig.json) - Configuración base
+- [apps/frontend/tsconfig.app.json](mdc:apps/frontend/tsconfig.app.json) - Configuración de la aplicación
+- [apps/frontend/tsconfig.node.json](mdc:apps/frontend/tsconfig.node.json) - Configuración de Node.js
+
+### ESLint Configuration
+Referencia: [apps/frontend/eslint.config.js](mdc:apps/frontend/eslint.config.js)
+
+## 📊 Componentes Implementados
+
+### Dashboard Analytics
+- Métricas principales con cards informativos
+- Gráficos interactivos usando Recharts
+- Lista de videos recientes con estados
+- Diseño responsivo y accesible
+
+### Gestión de Series
+- CRUD completo para series de videos
+- Filtros y búsqueda en tiempo real
+- Estados de serie (activa/pausada/borrador)
+- Interfaz intuitiva para configuración
+
+### Generación IA
+- Interface de prompts con validación
+- Cola de trabajos con progreso visual
+- Simulación de generación de contenido
+- Feedback visual para el usuario
+
+## 🎯 Mejores Prácticas
+
+### Performance
+1. **Lazy loading** para componentes pesados
+2. **Memoización** con `React.memo`, `useMemo`, `useCallback`
+3. **Code splitting** automático con Vite
+4. **Optimización de imágenes** y assets
+
+### Accesibilidad
+1. **Headless UI** para componentes accesibles
+2. **Semantic HTML** apropiado
+3. **ARIA labels** cuando sea necesario
+4. **Keyboard navigation** funcional
+
+### Testing (Futuro)
+1. **React Testing Library** para tests de componentes
+2. **Jest** para tests unitarios
+3. **Cypress** para tests end-to-end
+4. **Coverage** mínimo del 80%
+
+## 🚀 Scripts de Desarrollo
+
+### Comandos Disponibles
+```bash
+# Desarrollo
+npm run dev:frontend    # Servidor de desarrollo (puerto 5173)
+
+# Build
+npm run build          # Build de producción
+
+# Linting y Formatting
+npm run lint           # ESLint
+npm run format         # Prettier
+
+# Preview
+npm run preview        # Preview del build de producción
+```
+
+## 🔄 Estado Management (Futuro)
+
+### Recomendaciones
+1. **Zustand** para estado global simple
+2. **React Query/TanStack Query** para estado del servidor
+3. **Context API** para estado compartido simple
+4. **Evitar Redux** a menos que sea absolutamente necesario
+
+## 📱 Responsive Design
+
+### Breakpoints de Tailwind
+- `sm`: 640px y superior
+- `md`: 768px y superior  
+- `lg`: 1024px y superior
+- `xl`: 1280px y superior
+- `2xl`: 1536px y superior
+
+### Patrones Responsivos
+```typescript
+// Grid responsivo
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+// Texto responsivo
+<h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
+
+// Spacing responsivo
+<div className="p-4 md:p-6 lg:p-8">

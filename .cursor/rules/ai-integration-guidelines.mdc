@@ -1,0 +1,584 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# AI Integration Guidelines - Replex AI
+
+## 🤖 Integración con APIs de IA
+
+### Principios de Integración IA
+1. **Context7 como herramienta principal** para interactuar con librerías y dependencias de IA
+2. **Múltiples proveedores** para redundancia y optimización de costos
+3. **Rate limiting y retry logic** para manejo de errores
+4. **Caching inteligente** para reducir costos de API
+5. **Monitoreo de costos** y usage tracking
+
+## 🔧 Context7 Integration
+
+### Uso de Context7
+- **SIEMPRE usar Context7** cuando necesites interactuar con cualquier librería o dependencia de IA
+- Context7 proporciona documentación actualizada y ejemplos de código
+- Usar Context7 antes de implementar integraciones con APIs externas
+
+### Ejemplo de Uso de Context7
+```typescript
+// Antes de implementar integración con OpenAI
+// 1. Usar Context7 para obtener documentación actualizada
+// 2. Revisar mejores prácticas y ejemplos
+// 3. Implementar siguiendo las guías de Context7
+```
+
+## 🎬 APIs de Generación de Contenido
+
+### Proveedores de IA Planificados
+
+#### Generación de Texto/Scripts
+- **OpenAI GPT-4** - Generación de scripts principales
+- **Anthropic Claude** - Alternativa para scripts complejos
+- **Google Gemini** - Backup y casos específicos
+
+#### Generación de Imágenes
+- **DALL-E 3** - Imágenes principales
+- **Midjourney** - Estilos artísticos específicos
+- **Stable Diffusion** - Alternativa open source
+
+#### Text-to-Speech
+- **ElevenLabs** - Voces naturales premium
+- **Azure Speech Services** - Alternativa empresarial
+- **Google Cloud TTS** - Backup económico
+
+### Estructura de Servicios IA
+
+```typescript
+// services/ai/textGenerationService.ts
+export class TextGenerationService {
+  private providers = {
+    openai: new OpenAIProvider(),
+    claude: new ClaudeProvider(),
+    gemini: new GeminiProvider()
+  };
+
+  async generateScript(
+    prompt: string, 
+    options: GenerationOptions = {}
+  ): Promise<GeneratedScript> {
+    const provider = this.selectProvider(options);
+    
+    try {
+      const result = await provider.generateText(prompt, options);
+      await this.logUsage(provider.name, result.tokens);
+      return result;
+    } catch (error) {
+      return this.handleProviderError(error, prompt, options);
+    }
+  }
+
+  private selectProvider(options: GenerationOptions): AIProvider {
+    // Lógica de selección basada en:
+    // - Disponibilidad del proveedor
+    // - Costos
+    // - Tipo de contenido
+    // - Calidad requerida
+  }
+
+  private async handleProviderError(
+    error: Error, 
+    prompt: string, 
+    options: GenerationOptions
+  ): Promise<GeneratedScript> {
+    // Retry logic con proveedor alternativo
+    // Logging de errores
+    // Fallback strategies
+  }
+}
+```
+
+### Configuración de Proveedores
+
+```typescript
+// config/aiProviders.ts
+export const AI_PROVIDERS = {
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY,
+    model: 'gpt-4-turbo-preview',
+    maxTokens: 4000,
+    temperature: 0.7,
+    rateLimits: {
+      requestsPerMinute: 60,
+      tokensPerMinute: 150000
+    }
+  },
+  claude: {
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    model: 'claude-3-opus-20240229',
+    maxTokens: 4000,
+    temperature: 0.7,
+    rateLimits: {
+      requestsPerMinute: 50,
+      tokensPerMinute: 100000
+    }
+  },
+  elevenlabs: {
+    apiKey: process.env.ELEVENLABS_API_KEY,
+    defaultVoice: 'rachel',
+    rateLimits: {
+      requestsPerMinute: 20,
+      charactersPerMonth: 10000
+    }
+  }
+};
+```
+
+## 🎯 Prompts Engineering
+
+### Estructura de Prompts
+
+```typescript
+// prompts/videoScriptPrompts.ts
+export const VIDEO_SCRIPT_PROMPTS = {
+  educational: {
+    system: `Eres un experto en crear scripts para videos educativos cortos.
+    Crea contenido que sea:
+    - Informativo y preciso
+    - Fácil de entender
+    - Enganchante desde el primer segundo
+    - Optimizado para retención de audiencia`,
+    
+    template: `Crea un script para un video de {duration} segundos sobre: {topic}
+    
+    Audiencia objetivo: {audience}
+    Tono: {tone}
+    Plataforma: {platform}
+    
+    El script debe incluir:
+    1. Hook inicial (primeros 3 segundos)
+    2. Desarrollo del contenido
+    3. Call to action final
+    
+    Formato de salida:
+    - Texto para narración
+    - Indicaciones visuales
+    - Timing aproximado`
+  },
+  
+  entertainment: {
+    system: `Eres un creador de contenido viral especializado en entretenimiento.
+    Crea scripts que sean:
+    - Divertidos y memorables
+    - Visualmente atractivos
+    - Optimizados para engagement
+    - Apropiados para la plataforma`,
+    
+    template: `Crea un script viral para {platform} sobre: {topic}
+    
+    Duración: {duration} segundos
+    Estilo: {style}
+    Audiencia: {audience}
+    
+    Incluye:
+    1. Hook viral (primeros 2 segundos)
+    2. Desarrollo entretenido
+    3. Momento climático
+    4. Final memorable`
+  }
+};
+```
+
+### Optimización de Prompts
+
+```typescript
+// utils/promptOptimizer.ts
+export class PromptOptimizer {
+  optimizeForPlatform(prompt: string, platform: Platform): string {
+    const platformOptimizations = {
+      tiktok: {
+        maxDuration: 60,
+        style: 'casual, trendy',
+        hooks: ['¿Sabías que...?', 'Esto te va a sorprender', 'POV:']
+      },
+      youtube: {
+        maxDuration: 60,
+        style: 'informativo, profesional',
+        hooks: ['En este video aprenderás', 'Te explico en 60 segundos']
+      },
+      instagram: {
+        maxDuration: 90,
+        style: 'visual, estético',
+        hooks: ['Swipe para ver', 'Guarda este post']
+      }
+    };
+
+    return this.applyOptimizations(prompt, platformOptimizations[platform]);
+  }
+
+  optimizeForAudience(prompt: string, audience: Audience): string {
+    // Optimizaciones específicas por audiencia
+  }
+
+  optimizeForCost(prompt: string, budget: number): string {
+    // Optimizaciones para reducir tokens/costos
+  }
+}
+```
+
+## 💰 Cost Management
+
+### Tracking de Costos
+
+```typescript
+// services/costTrackingService.ts
+export class CostTrackingService {
+  async logAPIUsage(
+    provider: string,
+    operation: string,
+    tokens: number,
+    cost: number
+  ): Promise<void> {
+    await this.database.apiUsage.create({
+      provider,
+      operation,
+      tokens,
+      cost,
+      timestamp: new Date()
+    });
+
+    // Alertas si se exceden límites
+    await this.checkCostLimits(provider, cost);
+  }
+
+  async getCostSummary(period: 'day' | 'week' | 'month'): Promise<CostSummary> {
+    // Resumen de costos por período
+  }
+
+  async predictMonthlyCost(): Promise<number> {
+    // Predicción basada en uso actual
+  }
+
+  private async checkCostLimits(provider: string, cost: number): Promise<void> {
+    const limits = await this.getCostLimits(provider);
+    const currentUsage = await this.getCurrentUsage(provider);
+
+    if (currentUsage + cost > limits.monthly) {
+      await this.sendCostAlert(provider, currentUsage, limits);
+    }
+  }
+}
+```
+
+### Estrategias de Optimización
+
+```typescript
+// services/costOptimizationService.ts
+export class CostOptimizationService {
+  async optimizeProviderSelection(
+    request: AIRequest
+  ): Promise<OptimalProvider> {
+    const providers = await this.getAvailableProviders();
+    
+    return providers
+      .filter(p => p.canHandle(request))
+      .sort((a, b) => {
+        // Ordenar por costo-beneficio
+        const costA = this.calculateCost(a, request);
+        const costB = this.calculateCost(b, request);
+        const qualityA = this.getQualityScore(a, request.type);
+        const qualityB = this.getQualityScore(b, request.type);
+        
+        return (costA / qualityA) - (costB / qualityB);
+      })[0];
+  }
+
+  async implementCaching(request: AIRequest): Promise<CachedResult | null> {
+    const cacheKey = this.generateCacheKey(request);
+    const cached = await this.cache.get(cacheKey);
+    
+    if (cached && this.isCacheValid(cached)) {
+      return cached;
+    }
+    
+    return null;
+  }
+
+  async batchRequests(requests: AIRequest[]): Promise<BatchResult> {
+    // Agrupar requests similares para optimizar costos
+    const batches = this.groupSimilarRequests(requests);
+    
+    return Promise.all(
+      batches.map(batch => this.processBatch(batch))
+    );
+  }
+}
+```
+
+## 🔄 Queue System para IA
+
+### Job Processing
+
+```typescript
+// jobs/aiGenerationJobs.ts
+export class AIGenerationJobs {
+  async processVideoGeneration(job: Job<VideoGenerationData>) {
+    const { seriesId, prompt, settings } = job.data;
+    
+    try {
+      // 1. Generar script (25% progreso)
+      job.progress(10);
+      const script = await this.textService.generateScript(prompt, settings);
+      job.progress(25);
+      
+      // 2. Generar imágenes (50% progreso)
+      const imagePrompts = this.extractImagePrompts(script);
+      const images = await Promise.all(
+        imagePrompts.map(p => this.imageService.generateImage(p))
+      );
+      job.progress(50);
+      
+      // 3. Generar audio (75% progreso)
+      const audio = await this.voiceService.generateVoice(
+        script.narration, 
+        settings.voice
+      );
+      job.progress(75);
+      
+      // 4. Procesar video (100% progreso)
+      const video = await this.videoService.processVideo({
+        script,
+        images,
+        audio,
+        settings
+      });
+      job.progress(100);
+      
+      return {
+        videoId: video.id,
+        videoUrl: video.url,
+        metadata: video.metadata
+      };
+      
+    } catch (error) {
+      await this.handleGenerationError(error, job.data);
+      throw error;
+    }
+  }
+
+  private async handleGenerationError(
+    error: Error, 
+    data: VideoGenerationData
+  ): Promise<void> {
+    // Log error
+    await this.logger.error('Video generation failed', {
+      error: error.message,
+      seriesId: data.seriesId,
+      prompt: data.prompt
+    });
+
+    // Notify user
+    await this.notificationService.sendError(data.userId, {
+      type: 'generation_failed',
+      message: 'Error generando video',
+      details: error.message
+    });
+
+    // Update database
+    await this.database.videos.update(data.videoId, {
+      status: 'failed',
+      error: error.message
+    });
+  }
+}
+```
+
+## 🧪 Testing AI Integrations
+
+### Mock Services para Testing
+
+```typescript
+// tests/mocks/aiServiceMocks.ts
+export class MockTextGenerationService implements TextGenerationService {
+  async generateScript(prompt: string): Promise<GeneratedScript> {
+    // Mock response para tests
+    return {
+      narration: 'Script de prueba generado',
+      visualCues: ['Imagen 1', 'Imagen 2'],
+      duration: 30,
+      metadata: {
+        tokens: 100,
+        cost: 0.01,
+        provider: 'mock'
+      }
+    };
+  }
+}
+
+export class MockImageGenerationService implements ImageGenerationService {
+  async generateImage(prompt: string): Promise<GeneratedImage> {
+    return {
+      url: 'https://example.com/mock-image.jpg',
+      prompt,
+      metadata: {
+        provider: 'mock',
+        cost: 0.02
+      }
+    };
+  }
+}
+```
+
+### Integration Tests
+
+```typescript
+// tests/integration/aiServices.test.ts
+describe('AI Services Integration', () => {
+  beforeEach(() => {
+    // Setup mock providers para tests
+    process.env.NODE_ENV = 'test';
+  });
+
+  describe('Text Generation', () => {
+    it('should generate script with proper format', async () => {
+      const service = new TextGenerationService();
+      const result = await service.generateScript(
+        'Crear video sobre inteligencia artificial'
+      );
+
+      expect(result.narration).toBeDefined();
+      expect(result.visualCues).toBeInstanceOf(Array);
+      expect(result.duration).toBeGreaterThan(0);
+    });
+
+    it('should handle provider failures gracefully', async () => {
+      // Test de fallback entre proveedores
+    });
+
+    it('should respect rate limits', async () => {
+      // Test de rate limiting
+    });
+  });
+
+  describe('Cost Tracking', () => {
+    it('should track API usage correctly', async () => {
+      // Test de tracking de costos
+    });
+
+    it('should alert on cost limits', async () => {
+      // Test de alertas de costos
+    });
+  });
+});
+```
+
+## 📊 Monitoring y Analytics
+
+### Métricas de IA
+
+```typescript
+// services/aiAnalyticsService.ts
+export class AIAnalyticsService {
+  async trackGenerationMetrics(result: GenerationResult): Promise<void> {
+    await this.metrics.record({
+      provider: result.provider,
+      operation: result.operation,
+      duration: result.duration,
+      tokens: result.tokens,
+      cost: result.cost,
+      quality: result.qualityScore,
+      success: result.success
+    });
+  }
+
+  async getProviderPerformance(): Promise<ProviderMetrics[]> {
+    // Métricas de performance por proveedor
+    return this.database.query(`
+      SELECT 
+        provider,
+        AVG(duration) as avg_duration,
+        AVG(quality) as avg_quality,
+        SUM(cost) as total_cost,
+        COUNT(*) as total_requests,
+        SUM(CASE WHEN success THEN 1 ELSE 0 END) / COUNT(*) as success_rate
+      FROM ai_generations 
+      WHERE created_at >= NOW() - INTERVAL '30 days'
+      GROUP BY provider
+    `);
+  }
+
+  async getOptimizationRecommendations(): Promise<Recommendation[]> {
+    // Recomendaciones basadas en métricas
+  }
+}
+```
+
+## 🔒 Security para APIs de IA
+
+### Manejo Seguro de API Keys
+
+```typescript
+// config/secureConfig.ts
+export class SecureAIConfig {
+  private static instance: SecureAIConfig;
+  private keys: Map<string, string> = new Map();
+
+  static getInstance(): SecureAIConfig {
+    if (!SecureAIConfig.instance) {
+      SecureAIConfig.instance = new SecureAIConfig();
+    }
+    return SecureAIConfig.instance;
+  }
+
+  getAPIKey(provider: string): string {
+    const key = this.keys.get(provider) || process.env[`${provider.toUpperCase()}_API_KEY`];
+    
+    if (!key) {
+      throw new Error(`API key not found for provider: ${provider}`);
+    }
+    
+    return key;
+  }
+
+  rotateKey(provider: string, newKey: string): void {
+    this.keys.set(provider, newKey);
+    // Log rotation event
+    this.logger.info(`API key rotated for provider: ${provider}`);
+  }
+}
+```
+
+### Input Sanitization
+
+```typescript
+// utils/inputSanitizer.ts
+export class InputSanitizer {
+  sanitizePrompt(prompt: string): string {
+    // Remover contenido potencialmente peligroso
+    // Validar longitud
+    // Escapar caracteres especiales
+    return prompt
+      .trim()
+      .substring(0, 2000) // Límite de caracteres
+      .replace(/[<>]/g, '') // Remover HTML tags
+      .replace(/javascript:/gi, ''); // Remover JavaScript
+  }
+
+  validatePrompt(prompt: string): ValidationResult {
+    const errors: string[] = [];
+
+    if (!prompt || prompt.trim().length === 0) {
+      errors.push('Prompt no puede estar vacío');
+    }
+
+    if (prompt.length > 2000) {
+      errors.push('Prompt excede el límite de caracteres');
+    }
+
+    if (this.containsInappropriateContent(prompt)) {
+      errors.push('Prompt contiene contenido inapropiado');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  }
+}
+```

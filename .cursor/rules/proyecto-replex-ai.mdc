@@ -1,0 +1,135 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Proyecto Replex AI - Reglas de Desarrollo
+
+## 📋 Descripción del Proyecto
+
+**Replex AI** es una plataforma SaaS de auto-generación y publicación de micro-videos (TikTok, YouTube Shorts, Instagram Reels) desde prompts de lenguaje natural. El proyecto combina inteligencia artificial avanzada con herramientas de edición intuitivas.
+
+## 🏗️ Arquitectura del Proyecto
+
+### Estructura de Monorepo
+```
+replex-ai/
+├── apps/
+│   ├── frontend/     # React 18 + TypeScript + Vite + Tailwind CSS
+│   └── backend/      # Node.js 18.20.0 + Express.js (en desarrollo)
+├── packages/
+│   ├── config/       # Configuraciones compartidas
+│   ├── shared/       # Utilidades compartidas
+│   └── types/        # Tipos TypeScript compartidos
+├── scripts/          # Scripts de automatización
+└── docs/            # Documentación del proyecto
+```
+
+### Tech Stack Principal
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS 3.4
+- **Backend**: Node.js 18.20.0 LTS + Express.js
+- **Base de Datos**: PostgreSQL 15+ + Redis
+- **Containerización**: Docker + Docker Compose
+- **Video Processing**: FFmpeg/WASM + WebCodecs API (futuro)
+
+## 🎯 Principios de Desarrollo
+
+### Reglas de Usuario Establecidas
+1. **No generar documentación** a menos que sea solicitada explícitamente
+2. **Responder siempre en Español**
+3. **Aplicar principios SOLID y DRY** de manera equilibrada, sin exagerar
+4. **Usar Context7** para interactuar con librerías y dependencias
+5. **Priorizar modificar código existente** por sobre crear código nuevo
+6. **Simplicidad sobre complejidad** - hacer el código más simple siempre que sea posible
+
+### Mejores Prácticas
+- Usar TypeScript estricto en todo el proyecto
+- Implementar componentes reutilizables y tipados
+- Seguir convenciones de naming consistentes
+- Mantener separación clara entre frontend y backend
+- Usar workspaces de npm para gestión de dependencias
+
+## 📁 Archivos Clave de Referencia
+
+### Configuración Principal
+- [package.json](mdc:package.json) - Configuración del monorepo y scripts principales
+- [tsconfig.json](mdc:tsconfig.json) - Configuración TypeScript global
+- [docker-compose.yml](mdc:docker-compose.yml) - Servicios de desarrollo (PostgreSQL, Redis)
+- [env.example](mdc:env.example) - Variables de entorno de ejemplo
+
+### Frontend
+- [apps/frontend/package.json](mdc:apps/frontend/package.json) - Dependencias del frontend
+- [apps/frontend/vite.config.ts](mdc:apps/frontend/vite.config.ts) - Configuración de Vite
+- [apps/frontend/tailwind.config.js](mdc:apps/frontend/tailwind.config.js) - Configuración de Tailwind CSS
+
+### Planificación
+- [plan-proyecto-replex-ai.md](mdc:plan-proyecto-replex-ai.md) - Plan detallado del proyecto por fases
+
+## 🚀 Estado Actual del Proyecto
+
+### ✅ Completado (Fase 0 y 0.5)
+- Monorepo configurado con workspaces
+- Docker Compose con PostgreSQL + Redis
+- Frontend funcional con React 18 + TypeScript + Tailwind CSS
+- Componentes principales: Dashboard, Gestión de Series, Generación IA
+- Herramientas de desarrollo: ESLint, Prettier, TypeScript
+
+### ❌ Pendiente (Fases 1-8)
+- Sistema de autenticación y backend API
+- Motor de generación de contenido IA
+- Editor timeline en navegador
+- Integración con redes sociales
+- Analytics y moderación
+
+## 🎨 Convenciones de Código
+
+### TypeScript
+- Usar interfaces para definir tipos de datos
+- Exportar tipos desde `packages/types/src/`
+- Usar tipos estrictos y evitar `any`
+
+### React
+- Componentes funcionales con hooks
+- Props tipadas con interfaces
+- Usar Tailwind CSS para estilos
+- Componentes reutilizables en `src/components/`
+
+### Naming Conventions
+- Archivos: kebab-case (`user-profile.tsx`)
+- Componentes: PascalCase (`UserProfile`)
+- Variables/funciones: camelCase (`getUserData`)
+- Constantes: UPPER_SNAKE_CASE (`API_BASE_URL`)
+
+## 🔧 Scripts Disponibles
+
+### Desarrollo
+- `npm run dev` - Ejecuta frontend y backend en paralelo
+- `npm run dev:frontend` - Solo frontend (puerto 5173)
+- `npm run dev:backend` - Solo backend (cuando esté implementado)
+
+### Docker
+- `npm run docker:up` - Levanta servicios de base de datos
+- `npm run docker:down` - Detiene servicios
+- `npm run docker:logs` - Ver logs de contenedores
+
+### Calidad de Código
+- `npm run lint` - Ejecuta ESLint en todos los workspaces
+- `npm run format` - Formatea código con Prettier
+- `npm test` - Ejecuta tests (cuando estén implementados)
+
+## 🎯 Objetivos de Desarrollo
+
+### Inmediatos (Fase 1)
+- Implementar sistema de autenticación completo
+- Crear API base con Express.js
+- Conectar frontend con backend
+
+### Mediano Plazo (Fases 2-4)
+- Integrar APIs de IA para generación de contenido
+- Implementar procesamiento de audio y voz
+- Desarrollar sistema de gestión de series
+
+### Largo Plazo (Fases 5-8)
+- Editor timeline avanzado en navegador
+- Integración con redes sociales
+- Sistema de analytics y optimización

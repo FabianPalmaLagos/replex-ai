@@ -1,0 +1,377 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Development Workflow - Replex AI
+
+## 🔄 Flujo de Trabajo de Desarrollo
+
+### Principios Fundamentales
+1. **Desarrollo incremental** - Pequeños commits frecuentes
+2. **Testing continuo** - Tests antes de merge
+3. **Code review obligatorio** - Al menos una revisión por PR
+4. **Documentación actualizada** - Solo cuando sea necesaria
+5. **Simplicidad sobre complejidad** - Soluciones directas y mantenibles
+
+## 🌿 Git Workflow
+
+### Estructura de Branches
+```
+main                    # Producción estable
+├── develop            # Integración de features
+├── feature/auth       # Nueva funcionalidad
+├── feature/ai-gen     # Generación IA
+├── hotfix/bug-fix     # Correcciones urgentes
+└── release/v1.0.0     # Preparación de release
+```
+
+### Convenciones de Commits
+```bash
+# Formato: tipo(scope): descripción
+
+# Tipos permitidos:
+feat(auth): agregar sistema de login con JWT
+fix(api): corregir validación de email en registro
+docs(readme): actualizar instrucciones de instalación
+style(frontend): aplicar formato con Prettier
+refactor(services): simplificar lógica de generación IA
+test(auth): agregar tests para middleware de autenticación
+chore(deps): actualizar dependencias de seguridad
+
+# Ejemplos específicos del proyecto:
+feat(series): implementar CRUD de series de videos
+fix(generation): corregir timeout en generación de contenido
+refactor(components): simplificar componente Dashboard
+test(api): agregar tests de integración para usuarios
+```
+
+### Pull Request Template
+```markdown
+## 📋 Descripción
+Breve descripción de los cambios realizados.
+
+## 🎯 Tipo de Cambio
+- [ ] Bug fix (cambio que corrige un issue)
+- [ ] Nueva feature (cambio que agrega funcionalidad)
+- [ ] Breaking change (cambio que rompe compatibilidad)
+- [ ] Refactoring (cambio que mejora código sin cambiar funcionalidad)
+
+## ✅ Checklist
+- [ ] El código sigue las convenciones del proyecto
+- [ ] Se han agregado tests para los cambios
+- [ ] Todos los tests pasan
+- [ ] Se ha actualizado la documentación (si es necesario)
+- [ ] Los cambios han sido probados localmente
+
+## 🧪 Testing
+Describe cómo se han probado los cambios.
+
+## 📸 Screenshots (si aplica)
+Capturas de pantalla de cambios visuales.
+```
+
+## 🐳 Docker Workflow
+
+### Servicios de Desarrollo
+Referencia: [docker-compose.yml](mdc:docker-compose.yml)
+
+### Comandos Docker Frecuentes
+```bash
+# Iniciar servicios de desarrollo
+npm run docker:up
+
+# Ver logs de servicios
+npm run docker:logs
+
+# Detener servicios
+npm run docker:down
+
+# Rebuild de servicios
+docker compose up --build
+
+# Acceso a base de datos
+docker exec -it replex-postgres psql -U replex_user -d replex_ai
+
+# Acceso a Redis
+docker exec -it replex-redis redis-cli
+```
+
+### Variables de Entorno
+Referencia: [env.example](mdc:env.example)
+
+```bash
+# Copiar archivo de ejemplo
+cp env.example .env
+
+# Editar variables según entorno
+# Desarrollo: usar valores por defecto
+# Producción: usar valores seguros
+```
+
+## 🧪 Testing Strategy
+
+### Niveles de Testing
+1. **Unit Tests** - Funciones y componentes individuales
+2. **Integration Tests** - Interacción entre módulos
+3. **E2E Tests** - Flujos completos de usuario
+4. **API Tests** - Endpoints y contratos de API
+
+### Estructura de Tests
+```
+tests/
+├── unit/
+│   ├── components/     # Tests de componentes React
+│   ├── services/       # Tests de servicios backend
+│   └── utils/          # Tests de utilidades
+├── integration/
+│   ├── api/           # Tests de API endpoints
+│   └── database/      # Tests de base de datos
+└── e2e/
+    ├── auth/          # Flujos de autenticación
+    ├── series/        # Gestión de series
+    └── generation/    # Generación de contenido
+```
+
+### Comandos de Testing
+```bash
+# Ejecutar todos los tests
+npm test
+
+# Tests con coverage
+npm run test:coverage
+
+# Tests en modo watch
+npm run test:watch
+
+# Tests específicos
+npm test -- --grep "auth"
+
+# E2E tests
+npm run test:e2e
+```
+
+## 🚀 Deployment Workflow
+
+### Ambientes
+1. **Development** - Local con Docker
+2. **Staging** - Ambiente de pruebas
+3. **Production** - Ambiente productivo
+
+### CI/CD Pipeline (Planificado)
+```yaml
+# .github/workflows/ci.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.20.0'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+
+  deploy-staging:
+    needs: test
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging
+        run: echo "Deploy to staging"
+
+  deploy-production:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Production
+        run: echo "Deploy to production"
+```
+
+## 📦 Package Management
+
+### Workspaces Configuration
+Referencia: [package.json](mdc:package.json)
+
+### Comandos de Workspaces
+```bash
+# Instalar dependencias en todos los workspaces
+npm install
+
+# Instalar dependencia en workspace específico
+npm install express --workspace=apps/backend
+
+# Ejecutar script en workspace específico
+npm run dev --workspace=apps/frontend
+
+# Ejecutar script en todos los workspaces
+npm run lint --workspaces
+
+# Agregar dependencia compartida
+npm install typescript --workspace=packages/types
+```
+
+### Gestión de Dependencias
+```bash
+# Verificar dependencias desactualizadas
+npm outdated --workspaces
+
+# Actualizar dependencias
+npm update --workspaces
+
+# Auditoría de seguridad
+npm audit --workspaces
+
+# Corregir vulnerabilidades
+npm audit fix --workspaces
+```
+
+## 🔧 Development Tools
+
+### Scripts Disponibles
+Referencia: [package.json](mdc:package.json)
+
+```bash
+# Desarrollo
+npm run dev              # Frontend + Backend en paralelo
+npm run dev:frontend     # Solo frontend (puerto 5173)
+npm run dev:backend      # Solo backend (cuando esté listo)
+
+# Build y Deploy
+npm run build            # Build de todos los workspaces
+npm run format           # Formatear código con Prettier
+npm run lint             # Linting con ESLint
+
+# Docker
+npm run docker:up        # Levantar servicios
+npm run docker:down      # Detener servicios
+npm run docker:logs      # Ver logs
+
+# Utilidades
+npm run setup            # Setup inicial del proyecto
+npm run verify           # Verificar configuración
+```
+
+### Configuración de Herramientas
+
+#### ESLint
+Referencia: [.eslintrc.js](mdc:.eslintrc.js)
+
+#### Prettier
+Referencia: [.prettierrc](mdc:.prettierrc)
+
+#### TypeScript
+Referencia: [tsconfig.json](mdc:tsconfig.json)
+
+## 🐛 Debugging
+
+### Frontend Debugging
+```bash
+# Vite dev server con source maps
+npm run dev:frontend
+
+# React DevTools en navegador
+# Redux DevTools (si se usa)
+# Vite plugin para debugging
+```
+
+### Backend Debugging
+```bash
+# Node.js con inspector
+node --inspect src/index.js
+
+# VS Code debugging configuration
+# Docker debugging con volumes
+# Database debugging con Adminer (http://localhost:8080)
+```
+
+### Database Debugging
+```bash
+# Acceso directo a PostgreSQL
+docker exec -it replex-postgres psql -U replex_user -d replex_ai
+
+# Adminer web interface
+http://localhost:8080
+
+# Redis debugging
+docker exec -it replex-redis redis-cli
+```
+
+## 📊 Monitoring y Logging
+
+### Development Monitoring
+```bash
+# Logs de aplicación
+tail -f logs/combined.log
+
+# Logs de Docker
+docker compose logs -f
+
+# Monitoring de performance
+npm run dev -- --profile
+```
+
+### Error Tracking (Futuro)
+- **Sentry** para error tracking
+- **Winston** para logging estructurado
+- **Prometheus** para métricas
+- **Grafana** para visualización
+
+## 🔒 Security Workflow
+
+### Security Checklist
+- [ ] Variables de entorno no committeadas
+- [ ] Dependencias actualizadas y sin vulnerabilidades
+- [ ] Secrets rotados regularmente
+- [ ] HTTPS en producción
+- [ ] Rate limiting implementado
+- [ ] Input validation en todas las rutas
+
+### Security Commands
+```bash
+# Auditoría de dependencias
+npm audit
+
+# Verificar secrets en código
+git secrets --scan
+
+# Análisis estático de seguridad
+npm run security:scan
+```
+
+## 📈 Performance Optimization
+
+### Frontend Performance
+- Bundle analysis con Vite
+- Lazy loading de componentes
+- Image optimization
+- Code splitting automático
+
+### Backend Performance
+- Database query optimization
+- Redis caching strategy
+- API response compression
+- Connection pooling
+
+### Monitoring Commands
+```bash
+# Bundle analysis
+npm run build:analyze
+
+# Performance profiling
+npm run dev -- --profile
+
+# Database performance
+EXPLAIN ANALYZE SELECT * FROM users;
+```

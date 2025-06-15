@@ -1,0 +1,444 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Backend Guidelines - Replex AI
+
+## 🚀 Tecnologías Backend
+
+### Stack Principal
+- **Node.js 18.20.0 LTS** (Hydrogen) - Soporte hasta abril 2025
+- **Express.js** para API REST
+- **PostgreSQL 15+** como base de datos principal
+- **Redis** para cache y sesiones
+- **TypeScript** para tipado estricto
+- **Docker** para containerización
+
+### Dependencias Clave (Planificadas)
+- **Prisma** o **TypeORM** para ORM
+- **JWT** para autenticación
+- **bcrypt** para hashing de contraseñas
+- **Joi** o **Zod** para validación de schemas
+- **Winston** para logging
+- **Bull** o **Agenda** para queue jobs
+
+## 📁 Estructura Backend (Planificada)
+
+```
+apps/backend/
+├── src/
+│   ├── controllers/     # Controladores de rutas
+│   ├── middleware/      # Middleware personalizado
+│   ├── models/         # Modelos de base de datos
+│   ├── routes/         # Definición de rutas
+│   ├── services/       # Lógica de negocio
+│   ├── utils/          # Utilidades y helpers
+│   ├── config/         # Configuraciones
+│   └── types/          # Tipos TypeScript específicos
+├── tests/              # Tests unitarios e integración
+├── migrations/         # Migraciones de base de datos
+└── seeds/             # Datos de prueba
+```
+
+## 🎯 Principios de Desarrollo Backend
+
+### Arquitectura
+1. **Separación de responsabilidades** - Controllers, Services, Models
+2. **Dependency Injection** donde sea apropiado
+3. **Error handling centralizado** con middleware
+4. **Validación de entrada** en todas las rutas
+5. **Logging estructurado** para debugging y monitoreo
+
+### Ejemplo de Estructura de Controlador
+```typescript
+// controllers/userController.ts
+import { Request, Response, NextFunction } from 'express';
+import { UserService } from '../services/userService';
+import { CreateUserSchema } from '../schemas/userSchemas';
+
+export class UserController {
+  constructor(private userService: UserService) {}
+
+  async createUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const validatedData = CreateUserSchema.parse(req.body);
+      const user = await this.userService.createUser(validatedData);
+      
+      res.status(201).json({
+        success: true,
+        data: user,
+        message: 'Usuario creado exitosamente'
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getUsers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await this.userService.getUsers();
+      
+      res.json({
+        success: true,
+        data: users
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+```
+
+## 🔐 Autenticación y Autorización
+
+### JWT Strategy
+```typescript
+// middleware/auth.ts
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    email: string;
+    role: string;
+  };
+}
+
+export const authenticateToken = (
+  req: AuthRequest, 
+  res: Response, 
+  next: NextFunction
+) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ 
+      success: false, 
+      message: 'Token de acceso requerido' 
+    });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
+    if (err) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Token inválido' 
+      });
+    }
+    
+    req.user = user as any;
+    next();
+  });
+};
+```
+
+## 🗄️ Base de Datos
+
+### Configuración Docker
+Referencia: [docker-compose.yml](mdc:docker-compose.yml)
+
+### Modelos de Datos (Planificados)
+```typescript
+// models/User.ts
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  role: 'admin' | 'user';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// models/Series.ts
+export interface Series {
+  id: string;
+  userId: string;
+  name: string;
+  description?: string;
+  status: 'active' | 'paused' | 'draft';
+  settings: SeriesSettings;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// models/Video.ts
+export interface Video {
+  id: string;
+  seriesId: string;
+  title: string;
+  description?: string;
+  status: 'generating' | 'ready' | 'published' | 'failed';
+  metadata: VideoMetadata;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+### Migraciones
+```sql
+-- migrations/001_create_users_table.sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_users_email ON users(email);
+```
+
+## 🔄 API Design
+
+### Convenciones REST
+```typescript
+// Rutas estándar
+GET    /api/v1/users           # Listar usuarios
+GET    /api/v1/users/:id       # Obtener usuario específico
+POST   /api/v1/users           # Crear usuario
+PUT    /api/v1/users/:id       # Actualizar usuario completo
+PATCH  /api/v1/users/:id       # Actualizar usuario parcial
+DELETE /api/v1/users/:id       # Eliminar usuario
+
+// Rutas anidadas
+GET    /api/v1/users/:id/series    # Series de un usuario
+POST   /api/v1/series/:id/videos   # Crear video en serie
+```
+
+### Formato de Respuesta Estándar
+```typescript
+// Respuesta exitosa
+{
+  "success": true,
+  "data": { /* datos */ },
+  "message": "Operación exitosa",
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "total": 100
+  }
+}
+
+// Respuesta de error
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Datos de entrada inválidos",
+    "details": [
+      {
+        "field": "email",
+        "message": "Email es requerido"
+      }
+    ]
+  }
+}
+```
+
+## 🎬 Integración con APIs de IA
+
+### Estructura de Servicios IA
+```typescript
+// services/aiService.ts
+export class AIService {
+  async generateScript(prompt: string): Promise<string> {
+    // Integración con OpenAI/Claude/etc.
+  }
+
+  async generateImage(description: string): Promise<string> {
+    // Integración con DALL-E/Midjourney/etc.
+  }
+
+  async generateVoice(text: string, voice: string): Promise<Buffer> {
+    // Integración con ElevenLabs/Azure Speech/etc.
+  }
+}
+
+// services/videoService.ts
+export class VideoService {
+  async processVideo(assets: VideoAssets): Promise<string> {
+    // Procesamiento con FFmpeg
+  }
+
+  async uploadToStorage(videoBuffer: Buffer): Promise<string> {
+    // Upload a S3/Cloudinary/etc.
+  }
+}
+```
+
+## 📊 Queue System
+
+### Job Processing
+```typescript
+// jobs/videoGenerationJob.ts
+import Bull from 'bull';
+
+export const videoQueue = new Bull('video generation', {
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT || '6379')
+  }
+});
+
+videoQueue.process('generate-video', async (job) => {
+  const { seriesId, prompt } = job.data;
+  
+  try {
+    // 1. Generar script
+    const script = await aiService.generateScript(prompt);
+    job.progress(25);
+    
+    // 2. Generar imágenes
+    const images = await aiService.generateImages(script);
+    job.progress(50);
+    
+    // 3. Generar audio
+    const audio = await aiService.generateVoice(script);
+    job.progress(75);
+    
+    // 4. Procesar video
+    const video = await videoService.processVideo({ images, audio });
+    job.progress(100);
+    
+    return { videoUrl: video };
+  } catch (error) {
+    throw new Error(`Error generando video: ${error.message}`);
+  }
+});
+```
+
+## 🔧 Configuración y Variables de Entorno
+
+### Variables Requeridas
+Referencia: [env.example](mdc:env.example)
+
+```bash
+# Base de datos
+DATABASE_URL=postgresql://user:password@localhost:5432/replex_ai
+REDIS_URL=redis://localhost:6379
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRES_IN=7d
+
+# APIs de IA
+OPENAI_API_KEY=sk-...
+ELEVENLABS_API_KEY=...
+
+# Redes Sociales
+TIKTOK_CLIENT_ID=...
+INSTAGRAM_CLIENT_ID=...
+YOUTUBE_CLIENT_ID=...
+
+# Storage
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+S3_BUCKET_NAME=replex-ai-videos
+```
+
+## 🧪 Testing Strategy
+
+### Estructura de Tests
+```typescript
+// tests/controllers/userController.test.ts
+import request from 'supertest';
+import { app } from '../../src/app';
+
+describe('User Controller', () => {
+  describe('POST /api/v1/users', () => {
+    it('should create a new user', async () => {
+      const userData = {
+        email: 'test@example.com',
+        password: 'password123',
+        name: 'Test User'
+      };
+
+      const response = await request(app)
+        .post('/api/v1/users')
+        .send(userData)
+        .expect(201);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.email).toBe(userData.email);
+    });
+  });
+});
+```
+
+## 🚀 Scripts de Desarrollo
+
+### Comandos Disponibles (Planificados)
+```bash
+# Desarrollo
+npm run dev:backend     # Servidor de desarrollo con hot reload
+
+# Base de datos
+npm run db:migrate      # Ejecutar migraciones
+npm run db:seed         # Poblar con datos de prueba
+npm run db:reset        # Reset completo de la base de datos
+
+# Testing
+npm run test            # Tests unitarios
+npm run test:integration # Tests de integración
+npm run test:e2e        # Tests end-to-end
+
+# Build
+npm run build           # Build de producción
+npm run start           # Ejecutar build de producción
+```
+
+## 📈 Monitoring y Logging
+
+### Winston Configuration
+```typescript
+// config/logger.ts
+import winston from 'winston';
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.errors({ stack: true }),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+    new winston.transports.Console({
+      format: winston.format.simple()
+    })
+  ]
+});
+```
+
+## 🔒 Seguridad
+
+### Mejores Prácticas
+1. **Helmet.js** para headers de seguridad
+2. **Rate limiting** para prevenir abuse
+3. **CORS** configurado apropiadamente
+4. **Validación de entrada** en todas las rutas
+5. **Sanitización** de datos de usuario
+6. **Secrets management** con variables de entorno
+
+### Middleware de Seguridad
+```typescript
+// middleware/security.ts
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+
+export const securityMiddleware = [
+  helmet(),
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100, // máximo 100 requests por ventana
+    message: 'Demasiadas solicitudes, intenta de nuevo más tarde'
+  })
+];
+```

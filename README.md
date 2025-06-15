@@ -4,6 +4,30 @@
 
 **Replex AI** es una plataforma SaaS que permite auto-generar y publicar micro-videos (TikTok, YouTube Shorts, Instagram Reels) desde prompts de lenguaje natural, combinando inteligencia artificial avanzada con herramientas de edición intuitivas.
 
+## 🎯 Estado del Proyecto
+
+### ✅ **Completado (50% del proyecto)**
+- **Fase 0**: Setup entorno y arquitectura base
+- **Fase 0.5**: Frontend React completo y funcional
+- **Fase 1**: Backend API REST con Express.js
+- **Fase 1.5**: Sistema de autenticación JWT completo
+
+### 🔄 **En Desarrollo**
+- **Próximo**: Integración frontend-backend
+- **Próximo**: Gestión de series de videos
+
+### 📍 **URLs de Desarrollo**
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3000/api/v1
+- **Health Check**: http://localhost:3000/api/v1/health
+- **Autenticación**: http://localhost:3000/api/v1/auth
+- **Adminer (DB)**: http://localhost:8080
+- **Redis Commander**: http://localhost:8081
+
+### 🔐 **Credenciales de Prueba**
+- **Admin**: admin@replex-ai.com / admin123
+- **Base de datos**: replex_user / replex_password
+
 ## 🚀 Características Principales
 
 - **🤖 Automatización IA**: Generación de contenido completo desde texto
@@ -14,10 +38,10 @@
 ## 🏗️ Arquitectura Técnica
 
 #### Tech Stack
-- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS 3.4
-- **Backend**: Node.js 18.20.0 LTS + Express.js *(por desarrollar)*
-- **Base de Datos**: PostgreSQL 15+ + Redis *(configurado)*
-- **Containerización**: Docker + Docker Compose *(configurado)*
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS 3.4 ✅ **FUNCIONAL**
+- **Backend**: Node.js 18.20.0 LTS + Express.js ✅ **FUNCIONAL**
+- **Base de Datos**: PostgreSQL 15+ + Redis ✅ **CONFIGURADO**
+- **Containerización**: Docker + Docker Compose ✅ **CONFIGURADO**
 - **Video Processing**: FFmpeg/WASM + WebCodecs API *(por desarrollar)*
 
 ### Estructura del Monorepo
@@ -30,7 +54,7 @@ replex-ai/
 │   │   │   │   ├── App.tsx        # Aplicación principal
 │   │   │   │   └── main.tsx       # Punto de entrada
 │   │   │   └── package.json
-│   │   └── backend/               # Express.js (por implementar)
+│   └── backend/               # Express.js API REST + JWT Auth ✅ FUNCIONAL
 │   └── packages/
 │       ├── config/                # Configuraciones compartidas
 │       ├── shared/                # Utilidades compartidas
@@ -64,8 +88,8 @@ cp env.example .env
 # Iniciar servicios de base de datos
 docker-compose up -d
 
-# Ejecutar frontend
-npm run dev:frontend
+# Ejecutar aplicación completa
+npm run dev
 ```
 
 #### Comandos Disponibles
@@ -73,8 +97,8 @@ npm run dev:frontend
 ```bash
 # Desarrollo
 npm run dev:frontend          # Inicia frontend en http://localhost:5173
-npm run dev:backend           # Backend (por implementar)
-npm run dev                   # Ambos servicios
+npm run dev:backend           # Inicia backend en http://localhost:3000
+npm run dev                   # Ambos servicios en paralelo
 
 # Base de datos
 docker-compose up -d          # Inicia PostgreSQL + Redis
