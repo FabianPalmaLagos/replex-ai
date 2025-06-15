@@ -13,6 +13,7 @@ import { logger } from './utils/logger';
 import { pool, testConnection } from './config/database';
 import { createAuthRoutes } from './routes/auth';
 import { apiLimiter } from './middleware/rateLimiter';
+import seriesRoutes from './routes/series';
 
 // Crear aplicación Express
 const app = express();
@@ -92,6 +93,9 @@ app.get('/api/v1/health', (req, res) => {
 // Rutas de autenticación
 app.use('/api/v1/auth', createAuthRoutes(pool));
 
+// Rutas de series
+app.use('/api/v1/series', seriesRoutes);
+
 // API info
 app.get('/api/v1', (req, res) => {
   res.json({
@@ -102,7 +106,7 @@ app.get('/api/v1', (req, res) => {
     endpoints: {
       health: '/api/v1/health',
       auth: '/api/v1/auth',
-      series: '/api/v1/series', // Para futuro
+      series: '/api/v1/series',
       users: '/api/v1/users', // Para futuro
     },
     authEndpoints: {
@@ -115,6 +119,18 @@ app.get('/api/v1', (req, res) => {
       resetPassword: 'POST /api/v1/auth/reset-password',
       me: 'GET /api/v1/auth/me',
       status: 'GET /api/v1/auth/status'
+    },
+    seriesEndpoints: {
+      list: 'GET /api/v1/series',
+      create: 'POST /api/v1/series',
+      get: 'GET /api/v1/series/:id',
+      update: 'PUT /api/v1/series/:id',
+      updateStatus: 'PATCH /api/v1/series/:id/status',
+      delete: 'DELETE /api/v1/series/:id',
+      duplicate: 'POST /api/v1/series/:id/duplicate',
+      stats: 'GET /api/v1/series/:id/stats',
+      search: 'GET /api/v1/series/search',
+      metrics: 'GET /api/v1/series/metrics'
     }
   });
 });

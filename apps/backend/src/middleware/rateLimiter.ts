@@ -145,4 +145,26 @@ export const apiLimiter = rateLimit({
       }
     });
   }
-}); 
+});
+
+/**
+ * Función helper para crear rate limiters personalizados
+ */
+export const createRateLimit = (options: {
+  windowMs: number;
+  max: number;
+  message: any;
+  keyGenerator?: (req: Request) => string;
+}) => {
+  return rateLimit({
+    windowMs: options.windowMs,
+    max: options.max,
+    message: options.message,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: options.keyGenerator,
+    handler: (req: Request, res: Response) => {
+      res.status(429).json(options.message);
+    }
+  });
+}; 
