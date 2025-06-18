@@ -1,0 +1,68 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Estructura del Proyecto Replex-AI
+
+## Arquitectura General
+Monorepo con backend Node.js/Express y frontend React/TypeScript usando Vite.
+
+## Frontend Structure
+```
+apps/frontend/
+├── src/
+│   ├── components/          # Componentes React reutilizables
+│   ├── contexts/           # Context providers (AuthContext, etc.)
+│   ├── hooks/              # Custom hooks
+│   ├── services/           # Servicios para API calls
+│   ├── types/              # Definiciones de tipos TypeScript
+│   └── main.tsx           # Entry point
+├── vite.config.ts         # Configuración de Vite
+└── tsconfig.app.json      # Configuración TypeScript
+```
+
+## Backend Structure
+```
+apps/backend/
+├── src/
+│   ├── controllers/        # Controladores de rutas
+│   ├── models/            # Modelos de base de datos
+│   ├── routes/            # Definición de rutas
+│   ├── services/          # Lógica de negocio
+│   ├── middleware/        # Middlewares personalizados
+│   └── config/            # Configuraciones
+└── migrations/            # Migraciones de BD
+```
+
+## Archivos Clave
+- Frontend entry: [src/main.tsx](mdc:apps/frontend/src/main.tsx)
+- Backend entry: [src/app.ts](mdc:apps/backend/src/app.ts)
+- Types barrel: [src/types/index.ts](mdc:apps/frontend/src/types/index.ts)
+- Series types: [src/types/series.ts](mdc:apps/frontend/src/types/series.ts)
+- Series service: [src/services/SeriesService.ts](mdc:apps/frontend/src/services/SeriesService.ts)
+
+## Convenciones de Código
+- Usar principios SOLID y DRY cuando sea necesario
+- Priorizar modificar código existente sobre crear nuevo
+- Mantener simplicidad sobre complejidad innecesaria
+- Usar Context7 para interacciones con librerías externas
+- Responder siempre en Español
+
+## Scripts Principales
+```bash
+# Desarrollo
+npm run dev              # Ambos servidores
+npm run dev:frontend     # Solo frontend
+npm run dev:backend      # Solo backend
+
+# Construcción
+npm run build           # Build completo
+npm run build:frontend  # Solo frontend
+npm run build:backend   # Solo backend
+```
+
+## Base de Datos
+- PostgreSQL con migraciones en [migrations/](mdc:apps/backend/migrations/)
+- Modelos en [src/models/](mdc:apps/backend/src/models/)
+- Scripts de inicialización en [scripts/](mdc:scripts/)

@@ -1,5 +1,13 @@
 // Servicio para gestión de series - Integración con API Backend
-import { Series, CreateSeriesData, UpdateSeriesData, SeriesFilters, SeriesListResult, SeriesStats, UserSeriesMetrics } from '../types/series';
+import * as SeriesTypes from '../types/series';
+
+type Series = SeriesTypes.Series;
+type CreateSeriesData = SeriesTypes.CreateSeriesData;
+type UpdateSeriesData = SeriesTypes.UpdateSeriesData;
+type SeriesFilters = SeriesTypes.SeriesFilters;
+type SeriesListResult = SeriesTypes.SeriesListResult;
+type SeriesStats = SeriesTypes.SeriesStats;
+type UserSeriesMetrics = SeriesTypes.UserSeriesMetrics;
 
 const API_BASE_URL = 'http://localhost:3000/api/v1';
 
@@ -57,7 +65,20 @@ export class SeriesService {
       headers: this.getAuthHeaders(),
     });
 
-    return this.handleResponse<SeriesListResult>(response);
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      const errorMessage = responseData.error?.message || 'Error en la solicitud';
+      const errorCode = responseData.error?.code || 'UNKNOWN_ERROR';
+      
+      throw new ApiError(errorMessage, response.status, errorCode, responseData.error?.details);
+    }
+
+    return {
+      series: responseData.data, 
+      pagination: responseData.pagination,
+      filters: responseData.filters
+    };
   }
 
   // Crear nueva serie
