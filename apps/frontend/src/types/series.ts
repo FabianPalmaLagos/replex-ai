@@ -203,4 +203,23 @@ export const contentStyleConfig = {
     description: 'Contenido de marketing y ventas',
     icon: '📢'
   }
+};
+
+// Exportación explícita de todos los tipos principales
+export type {
+  SeriesStatus,
+  SeriesFrequency,
+  Platform,
+  ContentStyle,
+  VoiceSettings,
+  PublishSchedule,
+  Series,
+  CreateSeriesData,
+  UpdateSeriesData,
+  SeriesFilters,
+  SeriesListResult,
+  SeriesStats,
+  UserSeriesMetrics,
+  SeriesFormData,
+  SeriesLoadingStates
 }; 

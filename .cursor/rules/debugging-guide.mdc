@@ -1,0 +1,87 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guía de Debugging para Replex-AI
+
+## Errores Comunes de Importación
+
+### "The requested module does not provide an export named"
+**Síntomas:** Error en el navegador al cargar módulos TypeScript
+**Soluciones:**
+1. Verificar que la exportación existe en [src/types/series.ts](mdc:apps/frontend/src/types/series.ts)
+2. Limpiar caché: `rm -rf node_modules/.vite dist`
+3. Usar importación wildcard como fallback
+4. Revisar configuración en [tsconfig.app.json](mdc:apps/frontend/tsconfig.app.json)
+
+### Errores de Resolución de Módulos
+**Síntomas:** TypeScript no encuentra los módulos
+**Soluciones:**
+1. Verificar alias en [vite.config.ts](mdc:apps/frontend/vite.config.ts)
+2. Usar barrel exports desde [src/types/index.ts](mdc:apps/frontend/src/types/index.ts)
+3. Reiniciar servidor de desarrollo completamente
+
+## Errores de Base de Datos
+
+### Conexión a PostgreSQL
+**Archivos relevantes:**
+- [src/config/database.ts](mdc:apps/backend/src/config/database.ts)
+- [docker-compose.yml](mdc:docker-compose.yml)
+
+**Verificaciones:**
+1. Docker containers ejecutándose
+2. Variables de entorno correctas
+3. Migraciones aplicadas
+
+### Errores de Migración
+**Ubicación:** [migrations/](mdc:apps/backend/migrations/)
+**Comandos útiles:**
+```bash
+# Verificar estado de migraciones
+npm run db:status
+
+# Aplicar migraciones pendientes
+npm run db:migrate
+```
+
+## Errores de Servidor
+
+### Puerto en Uso
+**Frontend (5173):** Verificar que no hay otros procesos Vite
+**Backend (3000):** Verificar que no hay otros servidores Node.js
+
+```bash
+# Matar procesos en puerto específico
+lsof -ti:5173 | xargs kill -9
+lsof -ti:3000 | xargs kill -9
+```
+
+### CORS Issues
+**Archivo:** [src/app.ts](mdc:apps/backend/src/app.ts)
+**Verificar:** Configuración de CORS para localhost:5173
+
+## Herramientas de Debug
+
+### Logs del Backend
+**Ubicación:** [logs/](mdc:apps/backend/logs/)
+**Configuración:** [src/utils/logger.ts](mdc:apps/backend/src/utils/logger.ts)
+
+### DevTools del Frontend
+- React DevTools para componentes
+- Network tab para API calls
+- Console para errores JavaScript/TypeScript
+
+## Comandos de Emergencia
+```bash
+# Reset completo del proyecto
+rm -rf node_modules apps/*/node_modules
+npm install
+npm run dev
+
+# Reset solo frontend
+cd apps/frontend
+rm -rf node_modules .vite dist
+npm install
+npm run dev
+```

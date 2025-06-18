@@ -1,0 +1,36 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# TypeScript Import Guidelines
+
+## Import Structure
+- Always use the barrel export from [src/types/index.ts](mdc:apps/frontend/src/types/index.ts) when importing types
+- Prefer wildcard imports for complex type collections to avoid module resolution issues
+- Use explicit type aliases when needed for clarity
+
+## Common Patterns
+```typescript
+// ✅ Preferred: Use barrel export
+import { CreateSeriesData, Series } from '../types';
+
+// ✅ Alternative: Wildcard import for complex scenarios
+import * as SeriesTypes from '../types/series';
+type CreateSeriesData = SeriesTypes.CreateSeriesData;
+
+// ❌ Avoid: Direct file imports that may cause resolution issues
+import { CreateSeriesData } from '../types/series';
+```
+
+## Module Resolution Issues
+If you encounter "The requested module does not provide an export named" errors:
+1. Check [tsconfig.app.json](mdc:apps/frontend/tsconfig.app.json) - ensure `moduleResolution` is set to "bundler"
+2. Verify exports exist in [src/types/series.ts](mdc:apps/frontend/src/types/series.ts)
+3. Clear Vite cache: `rm -rf node_modules/.vite dist`
+4. Use wildcard imports as fallback solution
+
+## File References
+- Main types: [src/types/series.ts](mdc:apps/frontend/src/types/series.ts)
+- Barrel export: [src/types/index.ts](mdc:apps/frontend/src/types/index.ts)
+- Service example: [src/services/SeriesService.ts](mdc:apps/frontend/src/services/SeriesService.ts)

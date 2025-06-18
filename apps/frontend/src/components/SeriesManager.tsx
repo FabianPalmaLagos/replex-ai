@@ -235,7 +235,7 @@ export function SeriesManager() {
 
       {/* Loading state */}
       {isLoading && (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
+        <div className="bg-white shadow sm:rounded-md">
           <div className="px-4 py-8 text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-400" />
             <p className="mt-2 text-sm text-gray-500">Cargando series...</p>
@@ -245,7 +245,7 @@ export function SeriesManager() {
 
       {/* Lista de series */}
       {!isLoading && series.length > 0 && (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
+        <div className="bg-white shadow sm:rounded-md">
           <ul role="list" className="divide-y divide-gray-200">
             {series.map((serie) => (
               <li key={serie.id}>
@@ -268,8 +268,8 @@ export function SeriesManager() {
                           )}>
                             {statusConfig[serie.status].icon} {statusConfig[serie.status].label}
                           </span>
-                          <Menu as="div" className="relative">
-                            <Menu.Button className="p-2 text-gray-400 hover:text-gray-600">
+                          <Menu as="div" className="dropdown-container">
+                            <Menu.Button className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
                               <MoreVertical className="w-4 h-4" />
                             </Menu.Button>
                             <Transition
@@ -281,95 +281,101 @@ export function SeriesManager() {
                               leaveFrom="transform opacity-100 scale-100"
                               leaveTo="transform opacity-0 scale-95"
                             >
-                              <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <button
-                                      onClick={() => handleEditSeries(serie)}
-                                      className={clsx(
-                                        active ? 'bg-gray-100' : '',
-                                        'flex w-full items-center px-4 py-2 text-sm text-gray-700'
-                                      )}
-                                    >
-                                      <Edit className="w-4 h-4 mr-3" />
-                                      Editar
-                                    </button>
-                                  )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <button
-                                      onClick={() => handleDuplicateSeries(serie.id, serie.name)}
-                                      className={clsx(
-                                        active ? 'bg-gray-100' : '',
-                                        'flex w-full items-center px-4 py-2 text-sm text-gray-700'
-                                      )}
-                                    >
-                                      <Copy className="w-4 h-4 mr-3" />
-                                      Duplicar
-                                    </button>
-                                  )}
-                                </Menu.Item>
-                                {serie.status === 'active' ? (
+                              <Menu.Items className="dropdown-menu divide-y divide-gray-100 focus:outline-none">
+                                <div className="py-1">
                                   <Menu.Item>
                                     {({ active }) => (
                                       <button
-                                        onClick={() => handleStatusChange(serie.id, 'paused')}
+                                        onClick={() => handleEditSeries(serie)}
                                         className={clsx(
                                           active ? 'bg-gray-100' : '',
                                           'flex w-full items-center px-4 py-2 text-sm text-gray-700'
                                         )}
                                       >
-                                        <Pause className="w-4 h-4 mr-3" />
-                                        Pausar
+                                        <Edit className="w-4 h-4 mr-3" />
+                                        Editar
                                       </button>
                                     )}
                                   </Menu.Item>
-                                ) : serie.status === 'paused' ? (
                                   <Menu.Item>
                                     {({ active }) => (
                                       <button
-                                        onClick={() => handleStatusChange(serie.id, 'active')}
+                                        onClick={() => handleDuplicateSeries(serie.id, serie.name)}
                                         className={clsx(
                                           active ? 'bg-gray-100' : '',
                                           'flex w-full items-center px-4 py-2 text-sm text-gray-700'
                                         )}
                                       >
-                                        <Play className="w-4 h-4 mr-3" />
-                                        Activar
+                                        <Copy className="w-4 h-4 mr-3" />
+                                        Duplicar
                                       </button>
                                     )}
                                   </Menu.Item>
-                                ) : (
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <button
-                                        onClick={() => handleStatusChange(serie.id, 'active')}
-                                        className={clsx(
-                                          active ? 'bg-gray-100' : '',
-                                          'flex w-full items-center px-4 py-2 text-sm text-gray-700'
-                                        )}
-                                      >
-                                        <Play className="w-4 h-4 mr-3" />
-                                        Publicar
-                                      </button>
-                                    )}
-                                  </Menu.Item>
-                                )}
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <button
-                                      onClick={() => handleDeleteSeries(serie.id)}
-                                      className={clsx(
-                                        active ? 'bg-gray-100' : '',
-                                        'flex w-full items-center px-4 py-2 text-sm text-red-700'
+                                </div>
+                                <div className="py-1">
+                                  {serie.status === 'active' ? (
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          onClick={() => handleStatusChange(serie.id, 'paused')}
+                                          className={clsx(
+                                            active ? 'bg-gray-100' : '',
+                                            'flex w-full items-center px-4 py-2 text-sm text-gray-700'
+                                          )}
+                                        >
+                                          <Pause className="w-4 h-4 mr-3" />
+                                          Pausar
+                                        </button>
                                       )}
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-3" />
-                                      Eliminar
-                                    </button>
+                                    </Menu.Item>
+                                  ) : serie.status === 'paused' ? (
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          onClick={() => handleStatusChange(serie.id, 'active')}
+                                          className={clsx(
+                                            active ? 'bg-gray-100' : '',
+                                            'flex w-full items-center px-4 py-2 text-sm text-gray-700'
+                                          )}
+                                        >
+                                          <Play className="w-4 h-4 mr-3" />
+                                          Activar
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                  ) : (
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          onClick={() => handleStatusChange(serie.id, 'active')}
+                                          className={clsx(
+                                            active ? 'bg-gray-100' : '',
+                                            'flex w-full items-center px-4 py-2 text-sm text-gray-700'
+                                          )}
+                                        >
+                                          <Play className="w-4 h-4 mr-3" />
+                                          Publicar
+                                        </button>
+                                      )}
+                                    </Menu.Item>
                                   )}
-                                </Menu.Item>
+                                </div>
+                                <div className="py-1">
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <button
+                                        onClick={() => handleDeleteSeries(serie.id)}
+                                        className={clsx(
+                                          active ? 'bg-gray-100' : '',
+                                          'flex w-full items-center px-4 py-2 text-sm text-red-700'
+                                        )}
+                                      >
+                                        <Trash2 className="w-4 h-4 mr-3" />
+                                        Eliminar
+                                      </button>
+                                    )}
+                                  </Menu.Item>
+                                </div>
                               </Menu.Items>
                             </Transition>
                           </Menu>

@@ -1,0 +1,58 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Vite Configuration & Troubleshooting
+
+## Configuration Files
+- Main config: [vite.config.ts](mdc:apps/frontend/vite.config.ts)
+- TypeScript config: [tsconfig.app.json](mdc:apps/frontend/tsconfig.app.json)
+
+## Essential Settings
+```typescript
+// vite.config.ts essentials
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  server: {
+    port: 5173,
+    host: true,
+  },
+})
+```
+
+## TypeScript Configuration
+Key settings in [tsconfig.app.json](mdc:apps/frontend/tsconfig.app.json):
+- `moduleResolution: "bundler"` - For modern module resolution
+- `verbatimModuleSyntax: false` - Prevents import/export syntax issues
+- `allowImportingTsExtensions: true` - Allows .ts imports
+
+## Common Issues & Solutions
+
+### Module Resolution Errors
+```bash
+# Clear Vite cache
+rm -rf node_modules/.vite dist
+npm run dev
+```
+
+### Import/Export Errors
+1. Check if the export actually exists in the target file
+2. Verify TypeScript configuration
+3. Use wildcard imports as fallback
+4. Restart dev server completely
+
+### Performance Issues
+- Use `npm run build` to check for build-time errors
+- Monitor bundle size with build analysis
+- Clear cache regularly during development
+
+## Development Workflow
+1. Always clear cache when switching branches
+2. Restart dev server after config changes
+3. Use TypeScript strict mode for better error catching
